@@ -30,7 +30,7 @@ public class MemberDAO {
 	
 	@Autowired
 	private JavaMailSender javaMailSender;
-	
+
 	public MemberTO login_Ok(MemberTO to) throws Exception {
 		to = memberMapperInter.login_Ok(to);
 		return to;
@@ -39,6 +39,22 @@ public class MemberDAO {
 	public MemberTO id_Search(MemberTO to) {
 		to = memberMapperInter.search_Id(to);
 		return to;
+	}
+	
+	public int member_Id_Check(MemberTO to) {
+		int flag = 2;
+		System.out.println(to.getEmail());
+		to = memberMapperInter.member_Id_Check(to);
+		
+		if(to.getEmail().equals("0")) {
+			System.out.println(to.getEmail());
+			flag = 0;
+			System.out.println("사용가능한 id다 이거야");
+		} else {
+			flag = 1;
+			System.out.println("중복 ID");
+		};
+		return flag;
 	}
 	
 	public MemberTO member_View(MemberTO to) {

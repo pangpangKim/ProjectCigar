@@ -101,28 +101,25 @@ public class ReviewDAO {
 		int pseq = likeTO.getLike_board_seq();
 		int flag = 2;
 		likeTO = reviewMapperInter.reviewLike_Check(likeTO);
-		if((Integer)memberSeq != null) {
-			if(likeTO.getLike_users_seq() == 0 && likeTO.getLike_board_seq() == 0) {
-	//			System.out.println("like 값1 : " +likeTO.getLike_users_seq());
-	//			System.out.println("like 값1 : " +likeTO.getLike_board_seq());
-				dislikeTO = reviewMapperInter.reviewDislike_Check(dislikeTO);
-				if(dislikeTO.getDislike_board_seq() == 0 && dislikeTO.getDislike_users_seq() == 0) {
-	//				System.out.println("dislike 값1 : " +dislikeTO.getDislike_users_seq());
-	//				System.out.println("dislike 값1 : " +dislikeTO.getDislike_board_seq());
-					reviewMapperInter.reviewLike_Insert(memberSeq, pseq);
-					reviewMapperInter.reviewLike_Up(to);
-				flag = 0;
-				} else {
-					flag = 3;
-				}
-			} else if(likeTO.getLike_users_seq() != 0 && likeTO.getLike_board_seq() != 0) {
-				reviewMapperInter.reviewLike_Delete(memberSeq, pseq);
-				reviewMapperInter.reviewLike_Down(to);
-				flag = 1;
+		if(likeTO.getLike_users_seq() == 0 && likeTO.getLike_board_seq() == 0) {
+//			System.out.println("like 값1 : " +likeTO.getLike_users_seq());
+//			System.out.println("like 값1 : " +likeTO.getLike_board_seq());
+			dislikeTO = reviewMapperInter.reviewDislike_Check(dislikeTO);
+			if(dislikeTO.getDislike_board_seq() == 0 && dislikeTO.getDislike_users_seq() == 0) {
+//				System.out.println("dislike 값1 : " +dislikeTO.getDislike_users_seq());
+//				System.out.println("dislike 값1 : " +dislikeTO.getDislike_board_seq());
+				reviewMapperInter.reviewLike_Insert(memberSeq, pseq);
+				reviewMapperInter.reviewLike_Up(to);
+			flag = 0;
+			} else {
+				flag = 3;
 			}
-		} else {
-			flag = 4;
+		} else if(likeTO.getLike_users_seq() != 0 && likeTO.getLike_board_seq() != 0) {
+			reviewMapperInter.reviewLike_Delete(memberSeq, pseq);
+			reviewMapperInter.reviewLike_Down(to);
+			flag = 1;
 		}
+		
 		return flag;
 	}
 	
@@ -133,28 +130,24 @@ public class ReviewDAO {
 		
 //		System.out.println(memberSeq);
 //		System.out.println(pseq);
-		if((Integer)memberSeq != null) {
-			dislikeTO = reviewMapperInter.reviewDislike_Check(dislikeTO);
-			if(dislikeTO.getDislike_users_seq() == 0 && dislikeTO.getDislike_board_seq() == 0) {
-//				System.out.println("dislike2 값 : " +dislikeTO.getDislike_users_seq());
-//				System.out.println("dislike2 값 : " +dislikeTO.getDislike_board_seq());
-				likeTO = reviewMapperInter.reviewLike_Check(likeTO);
-				if(likeTO.getLike_board_seq() == 0 && likeTO.getLike_users_seq() == 0) {
-//					System.out.println("like2 값 : " +likeTO.getLike_users_seq());
-//					System.out.println("like2 값 : " +likeTO.getLike_board_seq());
-					reviewMapperInter.reviewDislike_Up(to);
-					reviewMapperInter.reviewDislike_Insert(memberSeq, pseq);
-					flag = 0;
-				} else {
-					flag = 3;
-				}
-			} else if(dislikeTO.getDislike_users_seq() != 0 && dislikeTO.getDislike_board_seq() != 0 ) {
-				reviewMapperInter.reviewDislike_Down(to);
-				reviewMapperInter.reviewDislike_Delete(memberSeq, pseq);
-				flag = 1;
+		dislikeTO = reviewMapperInter.reviewDislike_Check(dislikeTO);
+		if(dislikeTO.getDislike_users_seq() == 0 && dislikeTO.getDislike_board_seq() == 0) {
+//			System.out.println("dislike2 값 : " +dislikeTO.getDislike_users_seq());
+//			System.out.println("dislike2 값 : " +dislikeTO.getDislike_board_seq());
+			likeTO = reviewMapperInter.reviewLike_Check(likeTO);
+			if(likeTO.getLike_board_seq() == 0 && likeTO.getLike_users_seq() == 0) {
+//				System.out.println("like2 값 : " +likeTO.getLike_users_seq());
+//				System.out.println("like2 값 : " +likeTO.getLike_board_seq());
+				reviewMapperInter.reviewDislike_Up(to);
+				reviewMapperInter.reviewDislike_Insert(memberSeq, pseq);
+				flag = 0;
+			} else {
+				flag = 3;
 			}
-		} else {
-			flag = 4;
+		} else if(dislikeTO.getDislike_users_seq() != 0 && dislikeTO.getDislike_board_seq() != 0 ) {
+			reviewMapperInter.reviewDislike_Down(to);
+			reviewMapperInter.reviewDislike_Delete(memberSeq, pseq);
+			flag = 1;
 		}
 		return flag;
 	}

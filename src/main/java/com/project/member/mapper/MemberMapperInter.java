@@ -23,8 +23,8 @@ public interface MemberMapperInter {
 	@Insert("insert into member_table values (0, #{email}, HEX(AES_ENCRYPT(#{password}, SHA2('apfh2009@naver.com', 256))), #{name}, #{address}, #{phone} , #{nickname}, #{smoke_years} , #{prefer_cigar},  now(), #{birthday});")
 	int member_Ok(MemberTO to);
 	
-	@Select("select email from member_table where name=#{name} and phone=#{phone} and birthday=#{birthday} ")
-	MemberTO search_Id(MemberTO to);
+	@Select("select count(email) email from member_table where email=#{email}")
+	MemberTO member_Id_Check(MemberTO to);
 	
 	@Select("select member_seq, email, name, address, phone, nickname, date_format(smoke_years, '%Y-%m-%d') smoke_years, prefer_cigar, sign_date, birthday "
 			+ "from member_table where member_seq=#{member_seq}")
@@ -43,6 +43,9 @@ public interface MemberMapperInter {
 	
 	@Delete("delete from member_table where email=#{email} and password=HEX(AES_ENCRYPT(#{password}, SHA2('apfh2009@naver.com', 256))) and member_seq=#{member_seq}")
 	int member_delete_ok(MemberTO to);
+	
+	@Select("select email from member_table where name=#{name} and phone=#{phone} and birthday=#{birthday} ")
+	MemberTO search_Id(MemberTO to);
 	
 	@Select("select email, name, member_seq, nickname from member_table where email=#{email}")
 	MemberTO mail_ok(MemberTO to);

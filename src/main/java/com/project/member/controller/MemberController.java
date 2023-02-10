@@ -48,8 +48,9 @@ public class MemberController {
 		HttpSession session = request.getSession();
 		
 		to.setEmail(request.getParameter("email"));
-		to.setPassword(request.getParameter("password"));	
+		to.setPassword(request.getParameter("password"));
 		to = dao.login_Ok(to);
+		
 		try {
 			session.setAttribute("emailss", to.getEmail());
 			session.setAttribute("member_seq", to.getMember_seq());
@@ -65,7 +66,7 @@ public class MemberController {
 		}
 		//System.out.println(result);
 
-		result.put("member_data", to.getEmail());
+		result.put("member_data", request.getParameter("email"));
 		mav.addObject("to", to);
 		mav.setViewName( "memberViews/loginOk" );
 		return mav;
@@ -89,39 +90,128 @@ public class MemberController {
 	}
 	
 	//id찾기
-		@RequestMapping(value = "/id_search.do", method = {RequestMethod.GET, RequestMethod.POST})
-		public ModelAndView id_Seach(HttpServletRequest request, HttpServletResponse response) {
-			ModelAndView mav = new ModelAndView();
-			mav.setViewName( "memberViews/idSearch" );
-			return mav;
+	@RequestMapping(value = "/id_search.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView id_Seach(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName( "memberViews/idSearch" );
+		return mav;
+	}
+		
+	@RequestMapping(value = "/id_search_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView id_Search_Ok(HttpServletRequest request, HttpServletResponse response) {
+		MemberTO to = new MemberTO();
+		JSONObject id_search_ok_obj = new JSONObject();
+		try {
+			to.setBirthday(Date.valueOf(request.getParameter("birthday")));
+			to.setName(request.getParameter("name"));
+			to.setPhone(request.getParameter("phoneNum1") + request.getParameter("phoneNum2") + request.getParameter("phoneNum3"));
+//			System.out.println("con:"+ to.getPhoneNum());
+//			System.out.println("con:"+to.getEmail());
+		} catch (NullPointerException e) {
+			System.err.println("NULL!");
 		}
 		
-		@RequestMapping(value = "/id_search_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-		public ModelAndView id_Search_Ok(HttpServletRequest request, HttpServletResponse response) {
-			MemberTO to = new MemberTO();
-			JSONObject id_search_ok_obj = new JSONObject();
-
-			try {
-				to.setBirthday(Date.valueOf(request.getParameter("birthday")));
-				to.setName(request.getParameter("name"));
-				to.setPhone(request.getParameter("phoneNum1") + request.getParameter("phoneNum2") + request.getParameter("phoneNum3"));
-				
-//				System.out.println("con:"+ to.getPhoneNum());
-//				System.out.println("con:"+to.getEmail());
-			} catch (NullPointerException e) {
-				System.err.println("NULL!");
-			}
-			to = dao.id_Search(to);
-			
-			id_search_ok_obj.put("email", to.getEmail());
-			
-			ModelAndView mav = new ModelAndView();
-			mav.addObject("id_search_ok_obj", id_search_ok_obj);
-			mav.addObject("to", to);
-			mav.setViewName( "memberViews/idSearchOk" );
-			return mav;
-		}
+		to = dao.id_Search(to);
+		id_search_ok_obj.put("email", to.getEmail());
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("id_search_ok_obj", id_search_ok_obj);
+		mav.addObject("to", to);
+		mav.setViewName( "memberViews/idSearchOk" );
+		return mav;
+	}
 	
+	// 회원가입
+	@RequestMapping(value = "/member.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView member(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName( "memberViews/member" );
+		return mav;
+	}
+		
+	// 회원가입 확인
+	@RequestMapping(value = "/member_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView member_ok(HttpServletRequest request, HttpServletResponse response) {
+		MemberTO to = new MemberTO();
+		JSONObject member_Ok_Obj = new JSONObject();
+		ModelAndView mav = new ModelAndView();
+		int flag = 0;
+		
+		to.setEmail(request.getParameter("email"));
+		to.setPassword(request.getParameter("password"));
+		to.setName(request.getParameter("name"));
+		to.setAddress(request.getParameter("address"));
+		to.setPhone(request.getParameter("phoneNum1") + request.getParameter("phoneNum2") + request.getParameter("phoneNum3"));
+		if(request.getParameter("nickname") != null ) {
+		to.setNickname(request.getParameter("nickname"));
+		} else {
+			to.setNickname(request.getParameter("email"));
+		}
+		to.setSmoke_years(Date.valueOf(request.getParameter("smoke_years")));
+		to.setPrefer_cigar(request.getParameter("prefer_cigar"));
+		to.setBirthday(Date.valueOf(request.getParameter("birthday")));
+		//int flag = dao.member_ok(to);
+		// --- 주민번호 검사 ---
+		String jumin_Front = request.getParameter("jumin_front");
+		String jumin_Back = request.getParameter("jumin_back");
+		String jumin = jumin_Front.trim() + jumin_Back.trim();
+				
+		int[] bits = {2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5};
+		
+		int sum = 0;
+		for(int i=0 ; i<bits.length ; i++) {
+			sum += Integer.parseInt(jumin.substring(i, i+1) ) * bits[i];
+		}
+		
+		int lastNum = Integer.parseInt(jumin.substring(12,13));
+		int resultNum = (11- (sum%11) )%10;
+
+		// --- 성인 인증 ---
+		LocalDate localDate = LocalDate.now();
+		DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		String now = localDate.format(dateformatter);
+		
+		// --- 99년 이전은 앞에 19 붙이기
+		if(Integer.parseInt(jumin_Front) < 19991231) {
+			jumin_Front = "19" + jumin_Front;
+		} else {
+			jumin_Front = "20" + jumin_Front;
+		}
+		
+		int adult_Check = Integer.parseInt(now) - Integer.parseInt(jumin_Front) / 10000;
+		System.out.println(jumin_Front);
+		
+		if(lastNum == resultNum) {
+			System.out.println("올바른 주민번호");
+			if(adult_Check < 19) {
+				System.out.println("성인 아님");
+				flag = 3;
+			} else {
+				flag = dao.member_Ok(to);
+			}
+		} else {
+			flag = 2;
+		}
+		
+		
+		mav.addObject("flag", flag);
+		mav.setViewName( "memberViews/memberOk" );
+		
+		member_Ok_Obj.put("flag", flag);
+		//System.out.println(result);
+		return mav;
+	}
+	
+	//회원가입시 아이디 중복 검사
+	@RequestMapping(value = "/member_id_check.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView memberIdCheck(HttpServletRequest request, HttpServletRequest response) {
+		ModelAndView mav = new ModelAndView();
+		MemberTO to = new MemberTO();
+		to.setEmail(request.getParameter("email"));
+		int flag = dao.member_Id_Check(to);
+		mav.setViewName( "memberViews/memberIdCheck" );
+		return mav;
+	}
+	// 회원정보 보기
 	@RequestMapping(value = "/member_view.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView member_View(HttpServletRequest request, HttpServletRequest response) {
 		MemberTO to = new MemberTO();
@@ -235,6 +325,7 @@ public class MemberController {
 		return mav;
 	}
 	
+	// 회원정보 수정
 	@RequestMapping(value = "/member_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView member_modify(HttpServletRequest request, HttpServletRequest response) {
 		MemberTO to = new MemberTO();
@@ -263,6 +354,7 @@ public class MemberController {
 		return mav;
 	}
 	
+	// 회원정보 수정 확인
 	@RequestMapping(value = "/member_modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView member_modify_ok(HttpServletRequest request, HttpServletRequest response) {
 		MemberTO to = new MemberTO();
@@ -317,7 +409,7 @@ public class MemberController {
 		return mav;
 	}
 	
-	
+	// 메일 보내기
 	@RequestMapping(value = "/mail.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView mail(HttpServletRequest request, HttpServletRequest response) {		
 		ModelAndView mav = new ModelAndView();
@@ -325,7 +417,7 @@ public class MemberController {
 		return mav;
 	}
 	
-	
+	// 메일 유효성 검사
 	@RequestMapping(value = "/mail_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView mail_ok(HttpServletRequest request, HttpServletRequest response) {		
 		ModelAndView mav = new ModelAndView();
@@ -339,90 +431,7 @@ public class MemberController {
 		return mav;
 	}
 	
-		// 회원가입
-	@RequestMapping(value = "/member.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public ModelAndView member(HttpServletRequest request, HttpServletResponse response) {
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName( "memberViews/member" );
-		return mav;
-	}
-	
-	// 회원가입 확인
-	@RequestMapping(value = "/member_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public ModelAndView member_ok(HttpServletRequest request, HttpServletResponse response) {
-		MemberTO to = new MemberTO();
-		JSONObject member_Ok_Obj = new JSONObject();
-		
-		int flag = 0;
-
-		to.setEmail(request.getParameter("email"));
-		to.setPassword(request.getParameter("password"));
-		to.setName(request.getParameter("name"));
-		to.setAddress(request.getParameter("address"));
-		to.setPhone(request.getParameter("phoneNum1") + request.getParameter("phoneNum2") + request.getParameter("phoneNum3"));
-		if(request.getParameter("nickname") != null ) {
-		to.setNickname(request.getParameter("nickname"));
-		} else {
-			to.setNickname(request.getParameter("email"));
-		}
-		to.setSmoke_years(Date.valueOf(request.getParameter("smoke_years")));
-		to.setPrefer_cigar(request.getParameter("prefer_cigar"));
-		to.setBirthday(Date.valueOf(request.getParameter("birthday")));
-
-		//int flag = dao.member_ok(to);
-		
-		// --- 주민번호 검사 ---
-		String jumin_Front = request.getParameter("jumin_front");
-		String jumin_Back = request.getParameter("jumin_back");
-		String jumin = jumin_Front.trim() + jumin_Back.trim();
-				
-		int[] bits = {2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5};
-		
-		int sum = 0;
-		for(int i=0 ; i<bits.length ; i++) {
-			sum += Integer.parseInt(jumin.substring(i, i+1) ) * bits[i];
-		}
-		
-		int lastNum = Integer.parseInt(jumin.substring(12,13));
-		int resultNum = (11- (sum%11) )%10;
-
-		// --- 성인 인증 ---
-		LocalDate localDate = LocalDate.now();
-		DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-		String now = localDate.format(dateformatter);
-		
-		// --- 99년 이전은 앞에 19 붙이기
-		if(Integer.parseInt(jumin_Front) < 19991231) {
-			jumin_Front = "19" + jumin_Front;
-		} else {
-			jumin_Front = "20" + jumin_Front;
-		}
-		
-		int adult_Check = Integer.parseInt(now) - Integer.parseInt(jumin_Front) / 10000;
-		System.out.println(jumin_Front);
-		
-		if(lastNum == resultNum) {
-			System.out.println("올바른 주민번호");
-			if(adult_Check < 19) {
-				System.out.println("성인 아님");
-				flag = 3;
-			} else {
-				flag = dao.member_Ok(to);
-			}
-		} else {
-			flag = 2;
-		}
-		
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("flag", flag);
-		mav.setViewName( "memberViews/memberOk" );
-		
-		member_Ok_Obj.put("flag", flag);
-		//System.out.println(result);
-		
-		return mav;
-	}
-	
+	// 회원 삭제, 회원 탈퇴
 	@RequestMapping("/member_delete.do")
 	public ModelAndView member_Delete(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView();
@@ -430,6 +439,7 @@ public class MemberController {
 		return mav;
 	}
 	
+	//회원 삭제, 회원 탈퇴 확인
 	@RequestMapping("/member_delete_ok.do")
 	public ModelAndView member_Delete_Ok(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView();
