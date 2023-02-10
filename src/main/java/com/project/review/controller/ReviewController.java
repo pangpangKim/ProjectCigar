@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.review.dao.ReviewDAO;
+import com.project.review.to.ReviewDislikeCheckTO;
+import com.project.review.to.ReviewLikeCheckTO;
 import com.project.review.to.ReviewTO;
 
 @Controller
@@ -40,7 +43,7 @@ public class ReviewController {
 			obj.put("review_content", to2.getReview_content());
 			obj.put("review_hit", to2.getReview_hit());
 			obj.put("review_cmt_count", to2.getReview_cmt_count());
-			obj.put("review_grade", to2.getReview_grade());
+			obj.put("review_grade", to2.getReview_grade());	
 			obj.put("review_like", to2.getReview_like());
 			obj.put("review_dislike", to2.getReview_dislike());
 			obj.put("review_file_name", to2.getReview_file_name());
@@ -61,7 +64,8 @@ public class ReviewController {
 		ReviewTO to = new ReviewTO();
 		//to.setReview_cigar_seq(Integer.parseInt(request.getParameter("review_cigar_seq")));
 		to.setReview_seq(1);
-		
+		HttpSession session = request.getSession();
+		//System.out.println((int)session.getAttribute("member_seq"));
 		to = dao.reviewView(to);
 		JSONObject reviewViewObj = new JSONObject();
 		reviewViewObj.put("review_seq", to.getReview_seq());
@@ -193,6 +197,51 @@ public class ReviewController {
 		int flag = dao.reviewDeleteOk(to);
 		mav.addObject("flag", flag);
 		mav.setViewName("reviewViews/reviewDelete_ok");
+		return mav;
+	}
+	
+	@RequestMapping("review/like.do")
+	public ModelAndView review_like(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView();
+		ReviewTO to = new ReviewTO();
+		ReviewLikeCheckTO likeTO = new ReviewLikeCheckTO();
+		ReviewDislikeCheckTO dislikeTO = new ReviewDislikeCheckTO();
+		HttpSession session = request.getSession();
+		//to.setReview_seq(Integer.parseInt(request.getParameter("review_seq")));
+		to.setReview_seq(1);
+		
+		dislikeTO.setDislike_board_seq(to.getReview_seq());
+		dislikeTO.setDislike_users_seq((int)session.getAttribute("member_seq"));
+		likeTO.setLike_board_seq(to.getReview_seq());
+		likeTO.setLike_users_seq((int)session.getAttribute("member_seq"));
+		int flag = dao.reviewLike(likeTO, dislikeTO ,to);
+		
+		mav.addObject("flag", flag);
+		mav.setViewName("reviewViews/reviewLike");
+		
+		return mav;
+	}
+	
+	@RequestMapping("review/dislike.do")
+	public ModelAndView review_dislike(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView();
+		ReviewTO to = new ReviewTO();
+		ReviewLikeCheckTO likeTO = new ReviewLikeCheckTO();
+		ReviewDislikeCheckTO dislikeTO = new ReviewDislikeCheckTO();
+		HttpSession session = request.getSession();
+		
+		//to.setReview_seq(Integer.parseInt(request.getParameter("review_seq")));
+		to.setReview_seq(1);
+		
+		dislikeTO.setDislike_board_seq(to.getReview_seq());
+		dislikeTO.setDislike_users_seq((int)session.getAttribute("member_seq"));
+		
+		likeTO.setLike_board_seq(to.getReview_seq());
+		likeTO.setLike_users_seq((int)session.getAttribute("member_seq"));
+		int flag = dao.reviewDislike(likeTO, dislikeTO , to);
+		
+		mav.addObject("flag", flag);
+		mav.setViewName("reviewViews/reviewDislike");
 		return mav;
 	}
 }

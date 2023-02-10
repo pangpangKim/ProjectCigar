@@ -143,7 +143,7 @@ public class MemberController {
 		ArrayList<ReviewTO> reviewLists = dao.review_board_lists(rto);
 		ArrayList<GongjiTO> gongjiLists = dao.gongji_board_lists(gto);
 		ArrayList<RequestCigarTO> requestLists = dao.request_board_lists(requestTO);
-		
+
 		to.setMember_seq((int)session.getAttribute("member_seq"));
 		to = dao.member_View(to);
 		
@@ -153,7 +153,7 @@ public class MemberController {
 		int smokeDiff = (Integer.parseInt(now) - Integer.parseInt(smokeYears)) /10000;
 		
 		System.out.println(smokeDiff);
-	
+
 		JSONObject memberInfoObj = new JSONObject();
 		member_View_Obj.put("member_seq", to.getMember_seq());
 		member_View_Obj.put("email", to.getEmail());
@@ -232,7 +232,6 @@ public class MemberController {
 		mav.addObject("to", to);
 		mav.addObject("smoke_years", smokeDiff);
 		mav.setViewName( "memberViews/memberView" );
-		
 		return mav;
 	}
 	
@@ -334,8 +333,7 @@ public class MemberController {
 		
 		to.setEmail(request.getParameter("email"));
 		to = dao.member_mail(to);
-		dao.mailSender2(to);
-		
+		System.out.println(to.getMember_seq());
 		mav.setViewName( "memberViews/memberMailOk" );
 		mav.addObject("to", to);
 		return mav;

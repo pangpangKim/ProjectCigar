@@ -53,11 +53,11 @@ public class MemberDAO {
 		try {
 			if(to.getEmail() != null) {
 				String toName = to.getName();
-				String subject = "테스트 제목";
+				String subject = "비밀번호 변경 이메일입니다.";
 				String content = "<a href='http://localhost:8080/login.do?meber_seq="+to.getMember_seq()+"'>이동하기</a>";
 				mimeMessage.addRecipient(RecipientType.TO, new InternetAddress(to.getEmail(), toName, "utf-8"));
 				mimeMessage.setSubject(subject, "utf-8");
-				mimeMessage.setText(content, "utf-8", "html");
+				mimeMessage.setText(content, "utf-8", "html");	
 				javaMailSender.send(mimeMessage);
 				System.out.println("전송이 완료 되었습니다");
 			} else { 
@@ -80,8 +80,13 @@ public class MemberDAO {
 		return to;
 	}
 	
-	public void mailSender2(MemberTO to) {
-
+	public int mail_password_ok(MemberTO to) {
+		int flag = 1;
+		int result = memberMapperInter.mail_password_ok(to);
+		if(result == 1 ) {
+			flag = 0;
+		}
+		return flag;
 	}
 	
 	public ArrayList<FreeBoardTO> free_board_lists(FreeBoardTO fto) {
