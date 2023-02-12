@@ -32,10 +32,11 @@ public class MemberController {
 	private MemberDAO dao;
 	
 	//로그인
-	@RequestMapping(value = {"/login.do" , "/"} ,method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value = {"/login.do"} ,method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView login(HttpServletRequest request, HttpServletResponse response) {		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName( "memberViews/login" );
+		request.getSession();
 		return mav;
 	}
 	
@@ -65,7 +66,6 @@ public class MemberController {
 			System.err.println("NULL! : " + e.getMessage());
 		}
 		//System.out.println(result);
-
 		result.put("member_data", request.getParameter("email"));
 		mav.addObject("to", to);
 		mav.setViewName( "memberViews/loginOk" );
@@ -399,7 +399,7 @@ public class MemberController {
 		String newPassword = request.getParameter("newPassword");
 		to.setMember_seq((int)session.getAttribute("member_seq"));
 		to.setPassword(request.getParameter("oldPassword"));
-		
+
 		int flag = dao.member_Modify_Password(newPassword,to);
 		member_Modify_Password_Obj.put("flag", flag);
 		

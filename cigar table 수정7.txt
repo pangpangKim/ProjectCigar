@@ -194,3 +194,13 @@ create table cigar_map_table(
 	smoking_area_address varchar(100),
 	smoking_area_img varchar(100)
 );
+
+create table like_check_table(
+	like_users_seq int,
+	like_board_seq int
+);
+
+create table dislike_check_table(
+	dislike_users_seq int,
+	dislike_board_seq int
+);
