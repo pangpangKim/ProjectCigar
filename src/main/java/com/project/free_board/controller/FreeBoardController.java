@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,12 +14,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
+import com.project.free_board.dao.FreeBoardCommentDAO;
 import com.project.free_board.dao.FreeBoardDAO;
+import com.project.free_board.to.FreeBoardCommentTO;
 import com.project.free_board.to.FreeBoardTO;
 
 @Controller
@@ -27,15 +30,17 @@ public class FreeBoardController {
 	@Autowired
 	private FreeBoardDAO dao;
 	
+	@Autowired
+	private FreeBoardCommentDAO cmtDAO;
+	
 //	private String uploadPath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/upload2/";
 	
-	@RequestMapping(value = "/free/list.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public ModelAndView freeList(HttpServletRequest request, HttpServletResponse response) {
-		ModelAndView mav = new ModelAndView();
+	@RequestMapping(value = "api/freeList.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public JSONArray freeList(HttpServletRequest request, HttpServletResponse response) {
 		ArrayList<FreeBoardTO> freeLists = dao.freeList();
 		
-		JSONObject freeListsObj = new JSONObject();
-		JSONArray jsonArray = new JSONArray();
+		//JSONObject freeListsObj = new JSONObject();
+		JSONArray freeList = new JSONArray();
 		for(FreeBoardTO to : freeLists) {
 			JSONObject obj = new JSONObject();
 			obj.put("free_seq",to.getFree_seq());
@@ -51,26 +56,23 @@ public class FreeBoardController {
 			obj.put("free_file_size", to.getFree_file_size());
 			obj.put("free_public",to.isFree_public());
 			
-			jsonArray.add(obj);
+			freeList.add(obj);
 		}
-		
-		freeListsObj.put("freeList", jsonArray);
-		
-		mav.addObject("freeListObj", freeListsObj);
-		mav.setViewName("freeViews/freeList");
-		return mav;
+		System.out.println(freeList);
+		return freeList;
 	}
 	
-	@RequestMapping(value = "/free/view.do", method = {RequestMethod.GET, RequestMethod.POST} )
-	public ModelAndView freeView(HttpServletRequest request, HttpServletResponse response) {
-		ModelAndView mav = new ModelAndView();
+	@RequestMapping(value = "api/freeView.do", method = {RequestMethod.GET, RequestMethod.POST} )
+	public JSONObject freeView(HttpServletRequest request, HttpServletResponse response) {
 		FreeBoardTO to = new FreeBoardTO();
-		
+		FreeBoardCommentTO cmtTO = new FreeBoardCommentTO();
 		//to.setFree_seq(Integer.parseInt(request.getParameter("free_seq")));
 		to.setFree_seq(1);
+		cmtTO.setFree_pseq(1);
 		
 		to = dao.freeView(to);
 		JSONObject freeViewObj = new JSONObject();
+		JSONArray freeArray = new JSONArray();
 		freeViewObj.put("free_seq",to.getFree_seq());
 		freeViewObj.put("free_writer_seq", to.getFree_writer_seq());
 		freeViewObj.put("free_writer", to.getFree_writer());
@@ -83,23 +85,43 @@ public class FreeBoardController {
 		freeViewObj.put("free_file_name", to.getFree_file_name());
 		freeViewObj.put("free_file_size", to.getFree_file_size());
 		freeViewObj.put("free_public",to.isFree_public());
+		freeArray.add(freeViewObj);
 		
-		mav.addObject("freeViewObj", freeViewObj);
-		mav.setViewName("freeViews/freeView");
+		JSONObject freeView = new JSONObject();
+		freeView.put("freeView", freeArray);
+		System.out.println(freeView);
 		
-		return mav;
+		ArrayList<FreeBoardCommentTO> CommentListTO = cmtDAO.freeCommentList(cmtTO);
+		JSONArray freeCommentLists = new JSONArray();
+		for(FreeBoardCommentTO cmtTO2 : CommentListTO) {
+			JSONObject obj = new JSONObject();
+			obj.put("free_cmt_seq", cmtTO2.getFree_cmt_seq());
+			obj.put("free_pseq", cmtTO2.getFree_pseq());
+			obj.put("free_cmt_writer_seq", cmtTO2.getFree_cmt_writer_seq());
+			obj.put("free_grp", cmtTO2.getFree_grp());
+			obj.put("free_grps", cmtTO2.getFree_grps());
+			obj.put("free_grpl", cmtTO2.getFree_grpl());
+			obj.put("free_cmt_writer", cmtTO2.getFree_cmt_writer());
+			obj.put("free_cmt_content", cmtTO2.getFree_cmt_content());
+			obj.put("free_cmt_reg_date", cmtTO2.getFree_cmt_reg_date());
+			
+			freeCommentLists.add(obj);
+		}
+		freeView.put("freeCmtView", freeCommentLists);
+		
+		
+		return freeView;
 	}
+//	
+//	@RequestMapping(value = "/free/write.do", method = {RequestMethod.GET, RequestMethod.POST})
+//	public ModelAndView freeWrite(HttpServletRequest request, HttpServletResponse response) {
+//		ModelAndView mav = new ModelAndView();
+//		mav.setViewName("freeViews/freeWrite");
+//		return mav;
+//	}
 	
-	@RequestMapping(value = "/free/write.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public ModelAndView freeWrite(HttpServletRequest request, HttpServletResponse response) {
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("freeViews/freeWrite");
-		return mav;
-	}
-	
-	@RequestMapping(value = "/free/write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public ModelAndView freeWriteOk(HttpServletRequest request, HttpServletResponse response, MultipartFile upload) {
-		ModelAndView mav = new ModelAndView();
+	@RequestMapping(value = "api/free/write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public JSONObject freeWriteOk(HttpServletRequest request, HttpServletResponse response, MultipartFile upload) {
 		HttpSession session = request.getSession();
 		FreeBoardTO to = new FreeBoardTO();
 		
@@ -142,14 +164,14 @@ public class FreeBoardController {
 //		}
 		
 		int flag = dao.freeWrite_Ok(to);
-		mav.addObject("flag", flag);
-		mav.setViewName("freeViews/freeWrite_ok");
-		return mav;
+		JSONObject write_ok = new JSONObject();
+		write_ok.put("flag", flag);
+		System.out.println(write_ok);
+		return write_ok;
 	}
 	
-	@RequestMapping(value = "/free/modify.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public ModelAndView freeModify(HttpServletRequest request, HttpServletResponse response) {
-		ModelAndView mav = new ModelAndView();
+	@RequestMapping(value = "api/free_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public JSONObject freeModify(HttpServletRequest request, HttpServletResponse response) {
 		FreeBoardTO to = new FreeBoardTO();
 		
 		//to.setFree_seq(Integer.parseInt(request.getParameter("free_seq")));
@@ -170,15 +192,16 @@ public class FreeBoardController {
 		freeModifyObj.put("free_file_size", to.getFree_file_size());
 		freeModifyObj.put("free_public", to.isFree_public());
 		
-		mav.addObject("freeModifyObj", freeModifyObj);
-		mav.setViewName("freeViews/freeModify");
+		JSONArray freeModifyArray = new JSONArray();
+		freeModifyArray.add(freeModifyObj);
+		JSONObject freeModify = new JSONObject();
+		freeModify.put("freeModify", freeModifyArray);
 		
-		return mav;
+		return freeModify;
 	}
 	
-	@RequestMapping(value = "/free/modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public ModelAndView freeModify_Ok(HttpServletRequest request, HttpServletResponse response, MultipartFile upload) {
-		ModelAndView mav = new ModelAndView();
+	@RequestMapping(value = "api/free/modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public JSONObject freeModify_Ok(HttpServletRequest request, HttpServletResponse response, MultipartFile upload) {
 		FreeBoardTO to = new FreeBoardTO();
 		String oldfilename = request.getParameter("free_file_name");
 		
@@ -212,17 +235,14 @@ public class FreeBoardController {
 		}
 		
 		int flag = dao.freeModifyOk(to, oldfilename);
-		mav.addObject("flag", flag);
-
-		mav.setViewName("freeViews/freeModify_ok");		
-		return mav;	
+		JSONObject freeModifyOk = new JSONObject(); 
+		freeModifyOk.put("flag", flag);
+		return freeModifyOk;	
 	}
 	
 	@RequestMapping(value = "/free/delete.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public ModelAndView freeDelete(HttpServletRequest request, HttpServletResponse response) {
-		ModelAndView mav = new ModelAndView();
+	public JSONObject freeDelete(HttpServletRequest request, HttpServletResponse response) {
 		FreeBoardTO to = new FreeBoardTO();
-		
 		//to.setFree_seq(Integer.parseInt(request.getParameter("free_seq")));
 		to.setFree_seq(14);
 		to = dao.freeDelete(to);
@@ -241,24 +261,57 @@ public class FreeBoardController {
 		freeDeleteObj.put("free_file_name", to.getFree_file_name());
 		freeDeleteObj.put("free_file_size", to.getFree_file_size());
 		
-		mav.addObject("freeDeleteObj", freeDeleteObj);
-		mav.setViewName("freeViews/freeDelete");
-		
-		return mav;
+		return freeDeleteObj;
 	}
 
 	@RequestMapping(value = "/free/delete_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public ModelAndView freedeleteOk(HttpServletRequest request, HttpServletResponse response) {
-		ModelAndView mav = new ModelAndView();
+	public JSONObject freedeleteOk(HttpServletRequest request, HttpServletResponse response) {
 		FreeBoardTO to = new FreeBoardTO();
 		
+		JSONObject freedeleteOk = new JSONObject();
 		to.setFree_seq(Integer.parseInt(request.getParameter("free_seq")));
 		to.setFree_file_name(request.getParameter("free_file_name"));
 		int flag = dao.freeDeleteOk(to);
+		freedeleteOk.put("flag", flag);
 		
-		mav.addObject("flag", flag);			
-		mav.setViewName("freeViews/freeDelete_ok");
+		return freedeleteOk;
+	}
+	
+	@RequestMapping(value = "api/freeSearch", method = {RequestMethod.GET, RequestMethod.POST})
+	public JSONArray freeSearch(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response){
+		FreeBoardTO to = new FreeBoardTO();
+//		to.setFree_subject(request.getParameter("free_subject"));
+//		to.setFree_content(request.getParameter("free_content"));
 		
-		return mav;
+		//to.setFree_subject("공개글");	
+		//to.setFree_content("1");
+		to.setFree_content((String)paramMap.get("Free_content"));
+		to.setFree_writer((String)paramMap.get("Free_writer"));
+		to.setFree_subject((String)paramMap.get("Free_subject"));
+		ArrayList<FreeBoardTO> freeSearchLists = dao.freeSearch(to);
+		JSONArray freeSearchArray = new JSONArray();
+		
+		for(FreeBoardTO to2 : freeSearchLists) {
+			JSONObject obj = new JSONObject();
+			obj.put("free_seq", to2.getFree_seq());
+			obj.put("free_writer_seq", to2.getFree_writer_seq());
+			obj.put("free_subject", to2.getFree_subject());
+			obj.put("free_writer", to2.getFree_writer());
+			obj.put("free_content", to2.getFree_content());
+			obj.put("free_hit", to2.getFree_hit());
+			obj.put("free_cmt_count", to2.getFree_cmt_count());
+			obj.put("free_file_size", to2.getFree_file_size());
+			obj.put("free_file_name", to2.getFree_file_name());
+			obj.put("free_smoke_years", to2.getFree_smoke_years());
+			obj.put("free_public", to2.isFree_public());
+			obj.put("free_reg_date", to2.getFree_reg_date());
+			freeSearchArray.add(obj);
+		}
+		
+		JSONObject freeSearch = new JSONObject();
+		freeSearch.put("freeSearch", freeSearchArray);
+		System.out.println(freeSearchArray);
+		
+		return freeSearchArray;
 	}
 }

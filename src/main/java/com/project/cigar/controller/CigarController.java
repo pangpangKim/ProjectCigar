@@ -1,5 +1,8 @@
 package com.project.cigar.controller;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -7,6 +10,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -211,5 +215,35 @@ public class CigarController {
 		mav.addObject("flag", flag);
 		mav.setViewName("cigarViews/cigarDelete_ok");
 		return mav;
+	}
+	
+	@RequestMapping("api/cigarSearch.do")
+	public JSONArray ciarSearch(@RequestBody Map<String, Object> paramMap, HttpServletRequest request, HttpServletResponse response) {
+		CigarTO to = new CigarTO();
+		to.setCigar_brand((String)paramMap.get("cigar_brand"));
+		to.setCigar_name((String)paramMap.get("cigar_name"));
+		to.setCigar_hash_tag((String)paramMap.get("cigar_hash_tag"));
+		ArrayList<CigarTO> cigarSearchList = dao.cigarSearch(to);
+		
+		JSONArray cigarSearchArray = new JSONArray();
+		for(CigarTO to2 : cigarSearchList) {
+			JSONObject obj = new JSONObject();
+			obj.put("cigar_seq", to2.getCigar_seq());
+			obj.put("cigar_brand", to2.getCigar_brand());
+			obj.put("cigar_name", to2.getCigar_name());
+			obj.put("cigar_cigar_tar", to2.getCigar_tar());
+			obj.put("cigar_nicotine", to2.getCigar_nicotine());
+			obj.put("cigar_hash_tag", to2.getCigar_hash_tag());
+			obj.put("cigar_file_name_", to2.getCigar_file_name());
+			obj.put("cigar_file_size", to2.getCigar_file_size());
+			obj.put("cigar_content", to2.getCigar_content());
+			obj.put("cigar_total_grade", to2.getCigar_total_grade());
+			obj.put("cigar_reg_date", to2.getCigar_reg_date());
+			obj.put("cigar_hit", to2.getCigar_hit());
+			cigarSearchArray.add(obj);
+		}
+		
+		System.out.println(cigarSearchArray);
+		return cigarSearchArray;
 	}
 }

@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FreeBoardTO {
-	
 	private int free_seq;
 	private int free_writer_seq;
 	private String free_subject;

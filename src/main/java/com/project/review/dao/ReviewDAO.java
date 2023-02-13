@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import com.project.review.mapper.ReviewMapperInter;
 import com.project.review.to.ReviewDislikeCheckTO;
 import com.project.review.to.ReviewLikeCheckTO;
@@ -150,5 +151,9 @@ public class ReviewDAO {
 			flag = 1;
 		}
 		return flag;
+	}
+	public ArrayList<ReviewTO> reviewSearch(ReviewTO to){
+		ArrayList<ReviewTO> reviewSearchs = reviewMapperInter.ReviewBoardSearch(to);
+		return reviewSearchs;
 	}
 }

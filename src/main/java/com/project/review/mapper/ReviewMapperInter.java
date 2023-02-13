@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.lang.Nullable;
 
+import com.project.gongji.to.GongjiTO;
 import com.project.review.to.ReviewDislikeCheckTO;
 import com.project.review.to.ReviewLikeCheckTO;
 import com.project.review.to.ReviewTO;
@@ -87,4 +88,11 @@ public interface ReviewMapperInter {
 	@Delete("delete from dislike_check_table where #{memberSeq} and #{pseq}")
 	int reviewDislike_Delete(int memberSeq , int pseq);
 	
+	@Select("select review_seq, review_writer_seq, review_cigar_seq, review_subject, review_writer, review_reg_date, review_content, review_hit, review_cmt_count,"
+			+ "review_hit, review_cmt_count, review_grade, review_like, review_dislike, review_file_name, review_file_size, review_smoke_years "
+			+ " where reveiw_subject like CONCAT('%', #{review_subject}, '%')"
+			+ " or reveiw_content like CONCAT('%', #{review_content}, '%')"
+			+ " or reveiw_writer like CONCAT('%', #{review_writer}, '%')")
+	ArrayList<ReviewTO> ReviewBoardSearch(ReviewTO to);
+		
 }

@@ -103,4 +103,10 @@ public class FreeBoardDAO {
 		}
 		return flag;
 	}
+	
+	public ArrayList<FreeBoardTO> freeSearch(FreeBoardTO to) {
+		ArrayList<FreeBoardTO> freeSearchList = freeBoardMapperInter.FreeBoardSearch(to);
+		return freeSearchList;
+	}
+	
 }

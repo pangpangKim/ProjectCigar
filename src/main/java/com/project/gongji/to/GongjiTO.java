@@ -20,4 +20,5 @@ public class GongjiTO {
 	private String gongji_file_name;
 	private int gongji_file_size;
 	private Date gongji_smoke_years;
+	private boolean gongji_public;
 }

@@ -118,4 +118,9 @@ public class CigarDAO {
 		}
 		return flag;
 	}
+	
+	public ArrayList<CigarTO> cigarSearch(CigarTO to){
+		ArrayList<CigarTO> cigarSearchs = cigarMapperInter.cigarSearch(to);
+		return cigarSearchs;
+	}
 }

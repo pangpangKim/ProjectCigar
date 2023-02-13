@@ -48,4 +48,21 @@ public interface CigarMapperInter {
 	
 	@Delete("delete from cigar_list where cigar_seq=#{cigar_seq}")
 	int cigarDelete_ok(CigarTO to);
+	
+	@Select("select cigar_seq, cigar_writer_seq, cigar_brand, cigar_name, cigar_tar, cigar_nicotine, "
+			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade cigar_reg_date, cigar_hit "
+			+ "from cigar_list where cigar_writer like CONCAT('%', #{cigar_brand}, '%')"
+			+ " or cigar_name like CONCAT('%', #{cigar_name}, '%')"
+			+ " or cigar_hash_tag CONCAT('%', #{cigar_hash_tag}, '%'")
+	ArrayList<CigarTO> cigarSearch(CigarTO to);
+	
+	@Select("select cigar_seq, cigar_writer_seq, cigar_brand, cigar_name, cigar_tar, cigar_nicotine, "
+			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade cigar_reg_date, cigar_hit "
+			+ "from cigar_list order by cigar_hit desc")
+	ArrayList<CigarTO> cigarHitList();
+	
+	@Select("select cigar_seq, cigar_writer_seq, cigar_brand, cigar_name, cigar_tar, cigar_nicotine, "
+			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade, cigar_reg_date, cigar_hit "
+			+ "from cigar_list order by cigar_total_grade desc")
+	ArrayList<CigarTO> cigarGradeList();
 }

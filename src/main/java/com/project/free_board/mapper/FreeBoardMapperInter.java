@@ -52,4 +52,10 @@ public interface FreeBoardMapperInter {
 	
 	@Delete("delete from free_comment where free_pseq=#{free_seq}")
 	int freeDeleteAllComment(FreeBoardTO to);
+	
+	@Select("select free_seq, free_writer_seq, free_subject, free_writer, free_reg_date, free_content, free_hit, free_cmt_count, free_file_size, free_file_name, free_smoke_years, free_public"
+			+ " where free_subject like CONCAT('%', #{free_subject}, '%')"
+			+ " or free_content like CONCAT('%', #{free_content}, '%')"
+			+ " or free_writer like CONCAT('%', #{free_writer}, '%')")
+	ArrayList<FreeBoardTO> FreeBoardSearch(FreeBoardTO to);
 }
