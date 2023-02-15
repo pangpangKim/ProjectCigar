@@ -56,7 +56,7 @@ public class FreeBoardController {
 			obj.put("free_hit", to.getFree_hit());
 			obj.put("free_reg_date", to.getFree_reg_date().toString());
 			//obj.put("free_smoke_years", to.getFree_smoke_years().toString());
-			obj.put("free_hit", to.getFree_cmt_count());
+			obj.put("Free_cmt_count", to.getFree_cmt_count());
 			obj.put("free_file_name", to.getFree_file_name());
 			obj.put("free_file_size", to.getFree_file_size());
 			obj.put("free_public",to.isFree_public());

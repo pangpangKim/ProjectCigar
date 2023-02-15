@@ -171,9 +171,9 @@ public class CigarAPIController {
 	}
 	
 	@RequestMapping(value = "/api/cigar_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject cigarModify(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap, MultipartFile upload) {
+	public JSONObject cigarModify(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
 		CigarTO to = new CigarTO();
-		String oldfilename = (String)(paramMap.get("Cigar_file_name"));
+
 		to.setCigar_seq(Integer.parseInt((String)(paramMap.get("cigar_seq"))));
 		to = dao.cigarModify(to);
 		JSONObject cigarModifyObj = new JSONObject();
@@ -188,29 +188,13 @@ public class CigarAPIController {
 		cigarModifyObj.put("cigar_total_grade", to.getCigar_total_grade());
 		cigarModifyObj.put("cigar_reg_date", to.getCigar_reg_date());
 		cigarModifyObj.put("cigar_hit", to.getCigar_hit());
-		try {
-			if( !upload.isEmpty() ) {
-				byte[] bytes = upload.getBytes();
-				String extention = upload.getOriginalFilename().substring(upload.getOriginalFilename().indexOf("."));
-				to.setCigar_file_name(UUID.randomUUID().toString() + extention);
-				to.setCigar_file_size((int) upload.getSize());
-			    Path targetPath = Paths.get(filePath.trim() + oldfilename.trim());
-			    Path backupPath = Paths.get(backupFilePath.trim() + oldfilename.trim());			
-				Path path = Paths.get(filePath.trim() + to.getCigar_file_name().trim());
-				
-				Files.write(path, bytes);
-			    Files.copy(targetPath, backupPath);;
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		return cigarModifyObj;
 	}
 	
 	@RequestMapping(value = "/api/cigar_modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject cigarModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap, MultipartFile upload) {
+	public JSONObject cigarModifyOk(HttpServletRequest request, HttpServletResponse response,
+			@RequestBody Map<String,Object> paramMap, @RequestBody MultipartFile upload) {
 		HttpSession session = request.getSession();
 		CigarTO to = new  CigarTO();
 		String oldfilename = (String)paramMap.get("cigar_file_name");

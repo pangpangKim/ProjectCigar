@@ -60,7 +60,7 @@ public class ReviewDAO {
 	}
 	
 	public int reviewModifyOk(ReviewTO to, String oldfilename) {
-		int flag = 2;
+		int flag = 2;	
 		int result = 1;
 //		System.out.println("new: " + to.getFree_file_name().trim());
 //		System.out.println("old: " + oldfilename.trim());
