@@ -20,7 +20,9 @@ public class ReviewDAO {
 	@Autowired
 	private ReviewMapperInter reviewMapperInter;
 	
-	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/reviewUpload/";
+//	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/reviewUpload/";
+	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/reviewUpload/";
+
 	
 	public ArrayList<ReviewTO> reviewList(ReviewTO to) {
 		ArrayList<ReviewTO> reviewLists = reviewMapperInter.reviewList();

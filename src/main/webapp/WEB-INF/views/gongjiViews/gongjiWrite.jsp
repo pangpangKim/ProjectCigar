@@ -9,9 +9,9 @@
 <body>
 	<form action="/gongji/write_ok.do" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="gongji_writer_seq" value="1"> <br/>
-		리뷰 제목 <input type="text" name="gongji_subject"> <br/>
+		공지 제목 <input type="text" name="gongji_subject"> <br/>
 		<input type="hidden" name="gongji_writer" value="이름"> <br/>
-		리뷰 내용 <input type="text" name="gongji_content"> <br/>
+		공지 내용 <input type="text" name="gongji_content"> <br/>
 		파일 <input type="file" name="upload">
 		공개 <input type="radio" value="public" name="gongji_public" checked="checked"> 
 		비공개 <input type="radio" value="private" name="gongji_public"><br/>

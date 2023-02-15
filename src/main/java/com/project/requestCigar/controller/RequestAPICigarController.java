@@ -36,8 +36,12 @@ public class RequestAPICigarController {
 	@Autowired
 	private RequestCigarCommentDAO cmtDAO;
 	
-	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/requestUpload/";
-	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/requestUpload/requestBackup/";
+//	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/requestUpload/";
+//	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/requestUpload/requestBackup/";
+
+	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/requestUpload/";
+	private String backupFilePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/requestUpload/requestBackup/";
+
 	
 	@RequestMapping(value = "api/requestLists.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public JSONArray requestList(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
@@ -102,7 +106,7 @@ public class RequestAPICigarController {
 	}
 	
 	@RequestMapping(value = "api/request_write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject requestWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap, MultipartFile upload) {
+	public JSONObject requestWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap, @RequestBody MultipartFile upload) {
 		
 		RequestCigarTO to = new RequestCigarTO();
 		HttpSession session = request.getSession();
@@ -180,7 +184,7 @@ public class RequestAPICigarController {
 	
 	@RequestMapping(value = "api/request_modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public JSONObject requestModifyOk(HttpServletRequest request, HttpServletResponse response, 
-			@RequestBody Map<String,Object> paramMap, MultipartFile upload) {
+			@RequestBody Map<String,Object> paramMap,@RequestBody MultipartFile upload) {
 		 
 		RequestCigarTO to = new RequestCigarTO();
 		String oldfilename = (String)paramMap.get("request_file_name");

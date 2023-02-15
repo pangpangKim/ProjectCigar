@@ -27,8 +27,11 @@ import com.project.free_board.to.FreeBoardTO;
 @Controller
 public class FreeBoardController {
 	
-	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/freeUpload/";
-	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/freeUpload/freeBackup/";
+//	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/freeUpload/";
+//	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/freeUpload/freeBackup/";
+	
+	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/freeUpload/";
+	private String backupFilePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/freeUpload/freeBackup/";
 	
 	@Autowired
 	private FreeBoardDAO dao;

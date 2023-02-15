@@ -17,8 +17,8 @@ public class FreeBoardDAO {
 	@Autowired
 	private FreeBoardMapperInter freeBoardMapperInter;
 	
-	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/freeUpload/";
-	//private String filePath = System.getProperty("user.dir") + "/src/main/webapp/upload/freeUpload/";
+//	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/freeUpload/";
+	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/freeUpload/";
 	
 	public ArrayList<FreeBoardTO> freeList() {
 		ArrayList<FreeBoardTO> freeLists = freeBoardMapperInter.freeList();

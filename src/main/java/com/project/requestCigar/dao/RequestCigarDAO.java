@@ -18,8 +18,9 @@ public class RequestCigarDAO {
 	@Autowired
 	private RequestCigarMapperInter requestCigarMapperInter;
 	
-	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/requestUpload/";
-
+	//private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/requestUpload/";
+	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/reviewUpload/";
+	
 	public ArrayList<RequestCigarTO> requestList() {
 		ArrayList<RequestCigarTO> requestLists = requestCigarMapperInter.requestList();
 		return requestLists;

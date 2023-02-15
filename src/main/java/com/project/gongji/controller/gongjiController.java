@@ -30,8 +30,11 @@ import com.project.gongji.to.GongjiTO;
 @Controller
 public class GongjiController {
 	
-	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/gongjiUpload/";
-	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/gongjiUpload/gongjiBackup/";
+//	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/gongjiUpload/";
+//	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/gongjiUpload/gongjiBackup/";
+
+	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/gongjiUpload/";
+	private String backupFilePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/gongjiUpload/gongjiBackup/";
 	
 	@Autowired
 	private GongjiDAO dao;

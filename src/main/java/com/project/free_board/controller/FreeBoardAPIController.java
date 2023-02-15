@@ -37,11 +37,11 @@ public class FreeBoardAPIController {
 	@Autowired
 	private FreeBoardCommentDAO cmtDAO;
 	
-	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/freeUpload/";
-	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/freeUpload/freeBackup/";
+//	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/freeUpload/";
+//	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/freeUpload/freeBackup/";
 	
-//	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/upload/freeUpload/";
-//	private String backupFilePath = System.getProperty("user.dir") + "/src/main/webapp/upload/freeUpload/freeBackup/";
+	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/freeUpload/";
+	private String backupFilePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/freeUpload/freeBackup/";
 	
 	@RequestMapping(value = "api/freeList.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public JSONArray freeList(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
@@ -129,7 +129,7 @@ public class FreeBoardAPIController {
 	}
 	
 	@RequestMapping(value = "api/free/write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject freeWriteOk(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response, MultipartFile upload) {
+	public JSONObject freeWriteOk(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response,@RequestBody MultipartFile upload) {
 		HttpSession session = request.getSession();
 		FreeBoardTO to = new FreeBoardTO();
 		
@@ -201,7 +201,7 @@ public class FreeBoardAPIController {
 	}
 	
 	@RequestMapping(value = "api/free/modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject freeModify_Ok(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response, MultipartFile upload) {
+	public JSONObject freeModify_Ok(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response,@RequestBody MultipartFile upload) {
 		FreeBoardTO to = new FreeBoardTO();
 		String oldfilename = (String)paramMap.get("free_file_name");
 		

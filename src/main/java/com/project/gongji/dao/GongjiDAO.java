@@ -17,8 +17,9 @@ public class GongjiDAO {
 	@Autowired
 	private GongjiMapperInter gongjiMapperInter;
 	
-	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/gongjiUpload/";
-	
+//	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/gongjiUpload/";
+	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/gongjiUpload/";
+
 	public ArrayList<GongjiTO> gongjiList() {
 		ArrayList<GongjiTO> gongjiLists = gongjiMapperInter.gongjiList();
 		return gongjiLists;

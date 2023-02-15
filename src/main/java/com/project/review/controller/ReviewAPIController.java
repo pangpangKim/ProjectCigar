@@ -37,8 +37,11 @@ public class ReviewAPIController {
 	@Autowired
 	private ReviewCommentDAO cmtDAO;
 	
-	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/reviewUpload/";
-	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/reviewUpload/reviewBackup/";
+//	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/reviewUpload/";
+//	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/reviewUpload/reviewBackup/";
+	
+	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/reviewUpload/";
+	private String backupFilePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/reviewUpload/reviewBackup/";
 	
 	@RequestMapping(value = "api/reviewLists.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public JSONArray reviewList(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
@@ -105,7 +108,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap, MultipartFile upload) {
+	public JSONObject reviewWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap,@RequestBody MultipartFile upload) {
 		HttpSession session = request.getSession();
 		ReviewTO to = new ReviewTO();
 		try {
@@ -177,7 +180,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap, MultipartFile upload) {
+	public JSONObject reviewModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap, @RequestBody MultipartFile upload) {
 		ReviewTO to = new ReviewTO();
 		String oldfilename = (String)paramMap.get("review_file_name");
 		try {

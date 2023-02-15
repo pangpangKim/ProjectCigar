@@ -34,8 +34,11 @@ public class RequestCigarController {
 	@Autowired
 	private RequestCigarCommentDAO cmtDAO;
 
-	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/requestUpload/";
-	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/requestUpload/requestBackup/";
+//	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/requestUpload/";
+//	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/requestUpload/requestBackup/";
+
+	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/requestUpload/";
+	private String backupFilePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/requestUpload/requestBackup/";
 	
 	@RequestMapping("requestCigar/list.do")
 	public ModelAndView requestList(HttpServletRequest request, HttpServletResponse response) {
