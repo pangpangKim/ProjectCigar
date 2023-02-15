@@ -50,7 +50,7 @@ public interface MemberMapperInter {
 	@Select("select email, name, member_seq, nickname from member_table where email=#{email}")
 	MemberTO mail_ok(MemberTO to);
 	
-	@Update("update member_table set password=HEX(AES_ENCRYPT(#{password}, SHA2('apfh2009@naver.com', 256))) where member_seq=#{seq}")
+	@Update("update member_table set password=HEX(AES_ENCRYPT(#{password}, SHA2('apfh2009@naver.com', 256))) where member_seq=#{member_seq}")
 	int mail_password_ok(MemberTO to);
 	
 	@Select("select review_writer_seq, review_writer, review_seq, review_subject from review_board where review_writer_seq=#{review_writer_seq}")

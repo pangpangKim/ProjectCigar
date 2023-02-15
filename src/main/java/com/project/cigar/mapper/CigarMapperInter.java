@@ -9,12 +9,13 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.project.cigar.to.CigarTO;
+import com.project.free_board.to.FreeBoardTO;
 
 @Mapper
 public interface CigarMapperInter {
 
 	@Select("select cigar_seq, cigar_writer_seq, cigar_brand, cigar_name, cigar_tar, cigar_nicotine, "
-			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade cigar_reg_date, cigar_hit "
+			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade, cigar_reg_date, cigar_hit "
 			+ "from cigar_list order by cigar_seq desc")
 	ArrayList<CigarTO> cigarList();
 	
@@ -22,7 +23,7 @@ public interface CigarMapperInter {
 	int cigarView_hit(CigarTO to);
 	
 	@Select("select cigar_seq, cigar_writer_seq, cigar_brand, cigar_name, cigar_tar, cigar_nicotine, "
-			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade cigar_reg_date, cigar_hit "
+			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade, cigar_reg_date, cigar_hit "
 			+ "from cigar_list where cigar_seq = #{cigar_seq}")
 	CigarTO cigarView(CigarTO to);
 	
@@ -32,7 +33,7 @@ public interface CigarMapperInter {
 	int cigarWirte_ok(CigarTO to);
 	
 	@Select("select cigar_seq, cigar_writer_seq, cigar_brand, cigar_name, cigar_tar, cigar_nicotine, "
-			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade cigar_reg_date, cigar_hit "
+			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade, cigar_reg_date, cigar_hit "
 			+ "from cigar_list where cigar_seq = #{cigar_seq}")
 	CigarTO cigarModify(CigarTO to);
 	
@@ -41,8 +42,13 @@ public interface CigarMapperInter {
 			+ "cigar_file_name=#{cigar_file_name}, cigar_file_size=#{cigar_file_size}, cigar_hash_tag=#{cigar_hash_tag}, cigar_content=#{cigar_content} where cigar_seq=#{cigar_seq}")
 	int cigarModify_ok(CigarTO to);
 	
+	@Update("update free_board set "
+			+ "free_subject=#{free_subject}, free_content=#{free_content}"
+			+ "where free_seq=#{free_seq}")
+	int cigarModify_NoImage(CigarTO to);
+	
 	@Select("select cigar_seq, cigar_writer_seq, cigar_brand, cigar_name, cigar_tar, cigar_nicotine, "
-			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade cigar_reg_date, cigar_hit "
+			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade, cigar_reg_date, cigar_hit "
 			+ "from cigar_list where cigar_seq = #{cigar_seq}")
 	CigarTO cigarDelete(CigarTO to);
 	
@@ -50,14 +56,7 @@ public interface CigarMapperInter {
 	int cigarDelete_ok(CigarTO to);
 	
 	@Select("select cigar_seq, cigar_writer_seq, cigar_brand, cigar_name, cigar_tar, cigar_nicotine, "
-			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade cigar_reg_date, cigar_hit "
-			+ "from cigar_list where cigar_writer like CONCAT('%', #{cigar_brand}, '%')"
-			+ " or cigar_name like CONCAT('%', #{cigar_name}, '%')"
-			+ " or cigar_hash_tag CONCAT('%', #{cigar_hash_tag}, '%'")
-	ArrayList<CigarTO> cigarSearch(CigarTO to);
-	
-	@Select("select cigar_seq, cigar_writer_seq, cigar_brand, cigar_name, cigar_tar, cigar_nicotine, "
-			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade cigar_reg_date, cigar_hit "
+			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade, cigar_reg_date, cigar_hit "
 			+ "from cigar_list order by cigar_hit desc")
 	ArrayList<CigarTO> cigarHitList();
 	
@@ -65,4 +64,11 @@ public interface CigarMapperInter {
 			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade, cigar_reg_date, cigar_hit "
 			+ "from cigar_list order by cigar_total_grade desc")
 	ArrayList<CigarTO> cigarGradeList();
+	
+	@Select("select cigar_seq, cigar_writer_seq, cigar_brand, cigar_name, cigar_tar, cigar_nicotine, "
+			+ "cigar_file_name, cigar_file_size, cigar_hash_tag, cigar_content, cigar_total_grade, cigar_reg_date, cigar_hit "
+			+ "from cigar_list where cigar_writer like CONCAT('%', #{cigar_brand}, '%')"
+			+ " or cigar_name like CONCAT('%', #{cigar_name}, '%')"
+			+ " or cigar_hash_tag CONCAT('%', #{cigar_hash_tag}, '%'")
+	ArrayList<CigarTO> cigarSearch(CigarTO to);
 }

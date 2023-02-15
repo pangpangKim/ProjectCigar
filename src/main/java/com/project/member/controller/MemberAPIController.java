@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,11 +15,10 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.project.free_board.to.FreeBoardTO;
 import com.project.gongji.to.GongjiTO;
@@ -27,12 +27,12 @@ import com.project.member.to.MemberTO;
 import com.project.requestCigar.to.RequestCigarTO;
 import com.project.review.to.ReviewTO;
 
-@Controller
-public class MemberController {
+@RestController
+public class MemberAPIController {
 	@Autowired
 	private MemberDAO dao;
 	
-	//로그인
+	//로그인 뷰페이지
 //	@RequestMapping(value = {"/login.do"} ,method = {RequestMethod.GET, RequestMethod.POST})
 //	public ModelAndView login(HttpServletRequest request, HttpServletResponse response) {		
 //		ModelAndView mav = new ModelAndView();
@@ -69,7 +69,7 @@ public class MemberController {
 		return login_ok;
 	}
 	
-//	// 로그인 성공시 완료 화면
+//	// 로그인 성공시 완료 화면 뷰페이지
 //	@RequestMapping(value = "/login_complete.do", method = {RequestMethod.GET, RequestMethod.POST})
 //	public ModelAndView login_complete(HttpServletRequest request, HttpServletResponse response) {		
 //		ModelAndView mav = new ModelAndView();
@@ -78,7 +78,7 @@ public class MemberController {
 //	}
 //	
 //	
-//	//로그아웃
+//	//로그아웃 뷰페이지
 //	@RequestMapping(value = "/logout_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
 //	public ModelAndView logout_ok(HttpServletRequest request, HttpServletResponse response) {		
 //		ModelAndView mav = new ModelAndView();
@@ -86,7 +86,7 @@ public class MemberController {
 //		return mav;
 //	}
 //	
-//	//id찾기
+//	//id찾기 뷰페이지
 //	@RequestMapping(value = "/id_search.do", method = {RequestMethod.GET, RequestMethod.POST})
 //	public ModelAndView id_Seach(HttpServletRequest request, HttpServletResponse response) {
 //		ModelAndView mav = new ModelAndView();
@@ -112,7 +112,7 @@ public class MemberController {
 		return id_search_ok;
 	}
 	
-//	// 회원가입
+//	// 회원가입 뷰페이지
 //	@RequestMapping(value = "/member.do", method = {RequestMethod.GET, RequestMethod.POST})
 //	public ModelAndView member(HttpServletRequest request, HttpServletResponse response) {
 //		ModelAndView mav = new ModelAndView();
@@ -121,7 +121,7 @@ public class MemberController {
 //	}
 		
 	// 회원가입 확인
-	@RequestMapping(value = "/member_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value = "api/member_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public JSONObject member_ok(@RequestBody Map<String, Object> paramMap , HttpServletRequest request, HttpServletResponse response) {
 		MemberTO to = new MemberTO();
 		JSONObject member_Ok_Obj = new JSONObject();
@@ -189,7 +189,7 @@ public class MemberController {
 	}
 	
 	//회원가입시 아이디 중복 검사
-	@RequestMapping(value = "/member_id_check.do", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value = "api/member_id_check.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public JSONObject memberIdCheck(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletRequest response) {
 		JSONObject memberIdCheck = new JSONObject();
 		MemberTO to = new MemberTO();
@@ -200,7 +200,7 @@ public class MemberController {
 		return memberIdCheck;
 	}
 	
-	// 회원정보 보기
+	// 회원정보 보기 뷰페이지
 	@RequestMapping(value = "api/memberview.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public JSONObject member_View(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletRequest response) {
 		MemberTO to = new MemberTO();
@@ -299,7 +299,7 @@ public class MemberController {
 	
 	// 회원정보 수정
 	@RequestMapping(value = "api/member_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject member_modify(HttpServletRequest request, HttpServletRequest response) {
+	public JSONObject member_modify(@RequestBody Map<String, Object> paramMap, HttpServletRequest request, HttpServletRequest response) {
 		MemberTO to = new MemberTO();
 		HttpSession session = request.getSession();
 		JSONObject member_Modify_Obj = new JSONObject();
@@ -339,7 +339,7 @@ public class MemberController {
 		return member_modify_ok;
 	}
 	
-//	//비밀번호 수정
+//	//비밀번호 수정 뷰페이지
 //	@RequestMapping(value = "/member_modify_password.do", method = {RequestMethod.GET, RequestMethod.POST})
 //	public ModelAndView member_modify_password (HttpServletRequest request, HttpServletRequest response) {
 //		ModelAndView mav = new ModelAndView();
@@ -356,13 +356,13 @@ public class MemberController {
 		String newPassword = (String)paramMap.get("newpassowrd");
 		to.setMember_seq((int)session.getAttribute("member_seq"));
 		to.setPassword((String)paramMap.get("oldpassword"));
-
+		
 		int flag = dao.member_Modify_Password(newPassword,to);
 		modifyPassword.put("flag", flag);
 		return modifyPassword;
 	}
 	
-	// 메일 보내기
+	// 메일 보내기 뷰페이지
 //	@RequestMapping(value = "/mail.do", method = {RequestMethod.GET, RequestMethod.POST})
 //	public ModelAndView mail(HttpServletRequest request, HttpServletRequest response) {		
 //		ModelAndView mav = new ModelAndView();
@@ -375,14 +375,25 @@ public class MemberController {
 	public JSONObject mail_ok(@RequestBody Map<String, Object> paramMap, HttpServletRequest request, HttpServletRequest response) {		
 		MemberTO to = new MemberTO();
 		JSONObject mail_ok = new JSONObject();
-		to.setEmail((String)paramMap.get("email"));
-		to = dao.member_mail(to);
-		mail_ok.put("email", to.getEmail());
-		System.out.println(to.getMember_seq());
+		
+		String CHAR_SET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		Random random = new Random();
+	    StringBuilder password = new StringBuilder();
+	    for(int i = 0; i < 20; i++) {
+	    	int index = random.nextInt(CHAR_SET.length());   
+	    	password.append(CHAR_SET.charAt(index));    
+	    }
+	    String tempPassword = password.toString();
+		to.setEmail(request.getParameter("email"));
+		to.setMember_seq(to.getMember_seq());
+		int flag = dao.member_mail(to, tempPassword);
+		
+		mail_ok.put("flag", flag);
+		
 		return mail_ok;
 	}
 
-//	// 회원 삭제, 회원 탈퇴
+//	// 회원 삭제, 회원 탈퇴 뷰페이지
 //	@RequestMapping("/member_delete.do")
 //	public ModelAndView member_Delete(HttpServletRequest request, HttpServletResponse response) {
 //		ModelAndView mav = new ModelAndView();
@@ -401,7 +412,7 @@ public class MemberController {
 		to.setPassword((String)paramMap.get("password"));
 		to.setMember_seq((int)session.getAttribute("member_seq"));
 		int flag = dao.member_Delete_Ok(to);
-
+		
 		member_delete.put("flag", flag);
 		
 		return member_delete;

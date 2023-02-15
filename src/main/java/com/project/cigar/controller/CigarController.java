@@ -1,7 +1,11 @@
 package com.project.cigar.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,8 +14,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.cigar.dao.CigarDAO;
@@ -20,6 +24,9 @@ import com.project.cigar.to.CigarTO;
 
 @Controller
 public class CigarController {
+	
+	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/cigarUpload/";
+	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/cigarUpload/cigarBackup/";
 	
 	@Autowired
 	private CigarDAO dao;
@@ -74,7 +81,7 @@ public class CigarController {
 		ModelAndView mav = new ModelAndView();
 		CigarTO to = new CigarTO();
 		//to.setCigar_seq(Integer.parseInt(request.getParameter("cigar_seq")));
-		to.setCigar_seq(1);
+		to.setCigar_seq(2);
 		
 		to = dao.cigarView(to);
 		JSONObject cigarViewObj = new JSONObject();
@@ -104,7 +111,7 @@ public class CigarController {
 	}
 	
 	@RequestMapping("/cigar/write_ok.do")
-	public ModelAndView cigarWriteOk(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView cigarWriteOk(HttpServletRequest request, HttpServletResponse response, MultipartFile upload) {
 		ModelAndView mav = new ModelAndView();
 		CigarTO to = new CigarTO();
 		
@@ -113,11 +120,23 @@ public class CigarController {
 		to.setCigar_name(request.getParameter("cigar_name"));
 		to.setCigar_tar(Double.parseDouble(request.getParameter("cigar_tar")));
 		to.setCigar_nicotine(Double.parseDouble(request.getParameter("cigar_nicotine")));
-		to.setCigar_file_name(request.getParameter("cigar_file_name"));
-		to.setCigar_file_size(Integer.parseInt(request.getParameter("cigar_file_size")));
 		to.setCigar_hash_tag(request.getParameter("cigar_hash_tag"));
 		to.setCigar_content(request.getParameter("cigar_content"));
 		to.setCigar_total_grade(Double.parseDouble(request.getParameter("cigar_total_grade")));
+		
+		try {
+			if( !upload.isEmpty() ) {
+				String extention = upload.getOriginalFilename().substring(upload.getOriginalFilename().indexOf("."));
+				to.setCigar_file_name(UUID.randomUUID().toString() + extention);
+				to.setCigar_file_size((int)upload.getSize());
+				byte[] bytes = upload.getBytes();
+				Path path = Paths.get((filePath + to.getCigar_file_name()).trim());
+	            Files.write(path, bytes);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("[에러] : " + e.getMessage());
+		}
 		
 		/*
 		to.setCigar_writer_seq(1);
@@ -161,22 +180,44 @@ public class CigarController {
 	}
 	
 	@RequestMapping("/cigar/modify_ok.do")
-	public ModelAndView cigarModifyOk(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView cigarModifyOk(HttpServletRequest request, HttpServletResponse response, MultipartFile upload) {
 		ModelAndView mav = new ModelAndView();
 		CigarTO to = new  CigarTO();
-		to.setCigar_seq(Integer.parseInt(request.getParameter("cigar_seq")));
-		to.setCigar_writer_seq(Integer.parseInt(request.getParameter("cigar_writer_seq")));
-		to.setCigar_brand(request.getParameter("cigar_brand"));
-		to.setCigar_name(request.getParameter("cigar_name"));
-		to.setCigar_tar(Double.parseDouble(request.getParameter("cigar_tar")));
-		to.setCigar_nicotine(Double.parseDouble(request.getParameter("cigar_nicotine")));
-		to.setCigar_file_name(request.getParameter("cigar_file_name"));
-		to.setCigar_file_size(Integer.parseInt(request.getParameter("cigar_file_size")));
-		to.setCigar_hash_tag(request.getParameter("cigar_hash_tag"));
-		to.setCigar_content(request.getParameter("cigar_content"));
-		to.setCigar_total_grade(Double.parseDouble(request.getParameter("cigar_total_grade")));
+		String oldfilename = request.getParameter("cigar_file_name");
 		
-		int flag = dao.cigarModifyOk(to);
+		try {
+			to.setCigar_seq(Integer.parseInt(request.getParameter("cigar_seq")));
+			to.setCigar_writer_seq(Integer.parseInt(request.getParameter("cigar_writer_seq")));
+			to.setCigar_brand(request.getParameter("cigar_brand"));
+			to.setCigar_name(request.getParameter("cigar_name"));
+			to.setCigar_tar(Double.parseDouble(request.getParameter("cigar_tar")));
+			to.setCigar_nicotine(Double.parseDouble(request.getParameter("cigar_nicotine")));
+			to.setCigar_hash_tag(request.getParameter("cigar_hash_tag"));
+			to.setCigar_content(request.getParameter("cigar_content"));
+			to.setCigar_total_grade(Double.parseDouble(request.getParameter("cigar_total_grade")));
+			if( !upload.isEmpty()) {
+				byte[] bytes = upload.getBytes();
+				String extention = upload.getOriginalFilename().substring(upload.getOriginalFilename().indexOf("."));
+				to.setCigar_file_name(UUID.randomUUID().toString() + extention);
+				to.setCigar_file_size((int) upload.getSize());
+			    Path targetPath = Paths.get(filePath.trim() + oldfilename.trim());
+			    Path backupPath = Paths.get(backupFilePath.trim() + oldfilename.trim());			
+				Path path = Paths.get(filePath.trim() + to.getCigar_file_name().trim());
+				
+				Files.write(path, bytes);
+			    Files.copy(targetPath, backupPath);;
+			}
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			System.out.println("[에러] : " + e.getMessage());
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			System.out.println("[에러] : " + e.getMessage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("[에러] : " + e.getMessage());
+		}
+		int flag = dao.cigarModifyOk(to, oldfilename);
 		
 		mav.addObject("flag", flag);
 		mav.setViewName("cigarViews/cigarModify_ok");
@@ -211,18 +252,28 @@ public class CigarController {
 		ModelAndView mav = new ModelAndView();
 		CigarTO to = new CigarTO();
 		to.setCigar_seq(Integer.parseInt(request.getParameter("cigar_seq")));
+		try {
+			to = dao.cigarDelete(to);
+			Path targetPath = Paths.get(filePath.trim() + to.getCigar_file_name());
+			Path backupPath = Paths.get(backupFilePath.trim() + to.getCigar_file_name());		
+			Files.copy(targetPath, backupPath);
+			System.out.println(to.getCigar_file_name());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
 		int flag = dao.cigarDeleteOk(to);
 		mav.addObject("flag", flag);
 		mav.setViewName("cigarViews/cigarDelete_ok");
 		return mav;
 	}
 	
-	@RequestMapping("api/cigarSearch.do")
-	public JSONArray ciarSearch(@RequestBody Map<String, Object> paramMap, HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping("/cigarSearch.do")
+	public JSONArray ciarSearch(HttpServletRequest request, HttpServletResponse response) {
 		CigarTO to = new CigarTO();
-		to.setCigar_brand((String)paramMap.get("cigar_brand"));
-		to.setCigar_name((String)paramMap.get("cigar_name"));
-		to.setCigar_hash_tag((String)paramMap.get("cigar_hash_tag"));
+		to.setCigar_brand("");
+		to.setCigar_name("");
+		to.setCigar_hash_tag("");
 		ArrayList<CigarTO> cigarSearchList = dao.cigarSearch(to);
 		
 		JSONArray cigarSearchArray = new JSONArray();

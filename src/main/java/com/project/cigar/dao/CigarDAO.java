@@ -1,5 +1,6 @@
 package com.project.cigar.dao;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.mybatis.spring.annotation.MapperScan;
@@ -16,6 +17,8 @@ public class CigarDAO {
 	
 	@Autowired
 	private CigarMapperInter cigarMapperInter;
+	
+	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/cigarUpload/";
 	
 	public CigarListTO cigarList(CigarListTO listTO){
 		ArrayList<CigarTO> cigarLists = cigarMapperInter.cigarList();
@@ -60,6 +63,11 @@ public class CigarDAO {
 		return listTO;
 	}
 	
+	public ArrayList<CigarTO> cigarListMin(){
+		ArrayList<CigarTO> cigarLists = cigarMapperInter.cigarList();
+		return cigarLists;
+	}
+	
 	public CigarTO cigarView(CigarTO to) {
 		int res = cigarMapperInter.cigarView_hit(to);
 		System.out.println("조회수 상승 값 : " + res);
@@ -86,16 +94,31 @@ public class CigarDAO {
 		return to;
 	}
 	
-	public int cigarModifyOk(CigarTO to) {
-		int result = cigarMapperInter.cigarModify_ok(to);
+	public int cigarModifyOk(CigarTO to, String oldfilename) {
+		int result = 2;
 		int flag = 2;
+		
+		if(to.getCigar_file_name() != null) {
+			result = cigarMapperInter.cigarModify_ok(to);
+		} else {
+			result = cigarMapperInter.cigarModify_NoImage(to);
+		}
 		
 		if(result == 0){
 			// 비밀번호가 잘못된경우
 			flag = 1;
+			if( to.getCigar_file_name() != null ) {
+				File file = new File( filePath.trim(), oldfilename.trim() );
+				file.delete();
+			}
 		} else if(result == 1){
 			// 정상 작동
 			flag = 0;
+			if( to.getCigar_file_name() != null && oldfilename != null ) {
+				File file = new File( filePath.trim(), oldfilename.trim() );
+				//System.out.println(file.toString().trim());
+				file.delete();
+			}
 		}
 		return flag;
 	}
@@ -115,6 +138,12 @@ public class CigarDAO {
 		} else if(result == 1){
 			// 정상 작동
 			flag = 0;
+			if( to.getCigar_file_name() != null) {
+				File file = new File( filePath.trim(), to.getCigar_file_name().trim());
+				//System.out.println(file.toString().trim());
+				//System.out.println(file);
+				file.delete();
+			}
 		}
 		return flag;
 	}
