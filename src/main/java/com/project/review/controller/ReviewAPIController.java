@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,7 +44,7 @@ public class ReviewAPIController {
 	private String backupFilePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/reviewUpload/reviewBackup/";
 	
 	@RequestMapping(value = "api/reviewLists.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONArray reviewList(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONArray reviewList(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		
 		ReviewTO to = new ReviewTO();
 		to.setReview_cigar_seq(Integer.parseInt((String)(paramMap.get("cigar_seq"))));
@@ -75,7 +75,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_view.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewView(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject reviewView(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		ReviewTO to = new ReviewTO();
 		to.setReview_seq(Integer.parseInt((String)(paramMap.get("review_seq"))));
@@ -103,12 +103,12 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_write.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public void reviewWrite(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public void reviewWrite(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 	
 	}
 	
 	@RequestMapping(value = "api/review_write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap,@RequestBody MultipartFile upload) {
+	public JSONObject reviewWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap,@RequestParam MultipartFile upload) {
 		HttpSession session = request.getSession();
 		ReviewTO to = new ReviewTO();
 		try {
@@ -154,7 +154,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewModify(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject reviewModify(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		ReviewTO to = new ReviewTO();
 		to.setReview_seq(Integer.parseInt((String)(paramMap.get("review_seq"))));
@@ -180,7 +180,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap, @RequestBody MultipartFile upload) {
+	public JSONObject reviewModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap, @RequestParam MultipartFile upload) {
 		ReviewTO to = new ReviewTO();
 		String oldfilename = (String)paramMap.get("review_file_name");
 		try {
@@ -230,7 +230,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_delete.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewDelete(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject reviewDelete(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		ReviewTO to = new ReviewTO();
 		to.setReview_seq(Integer.parseInt((String)(paramMap.get("review_seq"))));
@@ -256,7 +256,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_delete_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewDeleteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject reviewDeleteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		HttpSession session = request.getSession();
 		ReviewTO to = new ReviewTO();
 		to.setReview_seq(Integer.parseInt((String)(paramMap.get("review_seq"))));
@@ -280,7 +280,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_like.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewLike(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject reviewLike(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		ReviewTO to = new ReviewTO();
 		ReviewLikeCheckTO likeTO = new ReviewLikeCheckTO();
@@ -301,7 +301,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_dislike.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewDislike(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject reviewDislike(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		ReviewTO to = new ReviewTO();
 		ReviewLikeCheckTO likeTO = new ReviewLikeCheckTO();
@@ -323,7 +323,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/reviewCommentLists.do", method = {RequestMethod.GET, RequestMethod.POST} )
-	public JSONArray reviewCommentList(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONArray reviewCommentList(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		JSONArray reviewCommentLists = new JSONArray();
 		ReviewCommentTO cmtTO = new ReviewCommentTO();
 		cmtTO.setReview_pseq(Integer.parseInt((String)(paramMap.get("review_pseq"))));
@@ -348,7 +348,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_parent_cmt_write.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewParentCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject reviewParentCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		HttpSession session = request.getSession();
 		JSONObject reviewCmtWriteObj = new JSONObject();
@@ -367,7 +367,7 @@ public class ReviewAPIController {
 	
 	
 	@RequestMapping(value = "api/review_cmt_write.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject reviewCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		HttpSession session = request.getSession();
 		ReviewCommentTO to = new ReviewCommentTO();
@@ -385,7 +385,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_cmt_write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewCmtWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject reviewCmtWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		ReviewCommentTO to = new ReviewCommentTO();
 		HttpSession session = request.getSession();
@@ -404,7 +404,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_cmt_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewCmtModify(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject reviewCmtModify(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		ReviewCommentTO to = new ReviewCommentTO();
 		to.setReview_cmt_seq(Integer.parseInt((String)(paramMap.get("review_cmt_seq"))));
@@ -424,7 +424,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_cmt_modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewCmtModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject reviewCmtModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		ReviewCommentTO to = new ReviewCommentTO();
 		to.setReview_cmt_seq(Integer.parseInt((String)(paramMap.get("review_cmt_seq"))));
@@ -443,7 +443,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_cmt_delete.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewCmtDelete(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject reviewCmtDelete(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		ReviewCommentTO to = new ReviewCommentTO();
 		to.setReview_cmt_seq(Integer.parseInt((String)(paramMap.get("review_cmt_seq"))));
@@ -463,7 +463,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/review_cmt_delete_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject reviewCmtDeleteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject reviewCmtDeleteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		HttpSession session = request.getSession();
 		ReviewCommentTO to = new ReviewCommentTO();
 		to.setReview_cmt_seq(Integer.parseInt((String)(paramMap.get("review_cmt_seq"))));
@@ -475,7 +475,7 @@ public class ReviewAPIController {
 	}
 	
 	@RequestMapping(value = "api/reviewSearch", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONArray reviewSearch(@RequestBody Map<String, Object>paramMap, HttpServletRequest request, HttpServletResponse response) {
+	public JSONArray reviewSearch(@RequestParam Map<String, Object>paramMap, HttpServletRequest request, HttpServletResponse response) {
 		ReviewTO to = new ReviewTO();
 		to.setReview_subject((String)paramMap.get("review_subject"));
 		to.setReview_content((String)paramMap.get("review_content"));

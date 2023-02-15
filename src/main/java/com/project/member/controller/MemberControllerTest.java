@@ -335,6 +335,9 @@ public class MemberControllerTest {
 	    }
 	    String tempPassword = password.toString();
 		to.setEmail(request.getParameter("email"));
+		to.setBirthday(Date.valueOf(request.getParameter("birthday")));
+		to.setName(request.getParameter("name"));
+		to.setPhone(request.getParameter("phoneNum1") + request.getParameter("phoneNum2") + request.getParameter("phoneNum3"));
 		to.setMember_seq(to.getMember_seq());
 		int flag = dao.member_mail(to, tempPassword);
 		

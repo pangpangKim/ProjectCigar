@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,7 +44,7 @@ public class RequestAPICigarController {
 
 	
 	@RequestMapping(value = "api/requestLists.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONArray requestList(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONArray requestList(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		
 		ArrayList<RequestCigarTO> listTO = dao.requestList();
 		JSONArray requestLists = new JSONArray();
@@ -73,7 +73,7 @@ public class RequestAPICigarController {
 	}
 	
 	@RequestMapping(value = "api/request_view.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject requestView(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject requestView(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		
 		RequestCigarTO to = new RequestCigarTO();
 		to.setRequest_seq(Integer.parseInt((String)(paramMap.get("request_seq"))));
@@ -101,12 +101,12 @@ public class RequestAPICigarController {
 	}
 	
 	@RequestMapping(value = "api/request_write.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public void requestWrite(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public void requestWrite(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		
 	}
 	
 	@RequestMapping(value = "api/request_write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject requestWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap, @RequestBody MultipartFile upload) {
+	public JSONObject requestWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap, @RequestParam MultipartFile upload) {
 		
 		RequestCigarTO to = new RequestCigarTO();
 		HttpSession session = request.getSession();
@@ -156,7 +156,7 @@ public class RequestAPICigarController {
 	}
 	
 	@RequestMapping(value = "api/request_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject requestModify(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject requestModify(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		RequestCigarTO to = new RequestCigarTO();
 
@@ -184,7 +184,7 @@ public class RequestAPICigarController {
 	
 	@RequestMapping(value = "api/request_modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public JSONObject requestModifyOk(HttpServletRequest request, HttpServletResponse response, 
-			@RequestBody Map<String,Object> paramMap,@RequestBody MultipartFile upload) {
+			@RequestParam Map<String,Object> paramMap,@RequestParam MultipartFile upload) {
 		 
 		RequestCigarTO to = new RequestCigarTO();
 		String oldfilename = (String)paramMap.get("request_file_name");
@@ -227,7 +227,7 @@ public class RequestAPICigarController {
 	}
 	
 	@RequestMapping(value = "api/request_delete.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject requestDelete(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject requestDelete(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		RequestCigarTO to = new RequestCigarTO();
 		to.setRequest_seq(Integer.parseInt((String)(paramMap.get("request_seq"))));
@@ -253,7 +253,7 @@ public class RequestAPICigarController {
 	}
 	
 	@RequestMapping(value = "api/request_delete_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject requestdeleteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject requestdeleteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		HttpSession session = request.getSession();
 		RequestCigarTO to = new RequestCigarTO();
 		to.setRequest_seq(Integer.parseInt((String)(paramMap.get("request_seq"))));
@@ -278,7 +278,7 @@ public class RequestAPICigarController {
 	}
 	
 	@RequestMapping(value = "api/requestCommentLists.do", method = {RequestMethod.GET, RequestMethod.POST} )
-	public JSONArray gongjiCommentList(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONArray gongjiCommentList(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		JSONArray requestCommentLists = new JSONArray();
 		RequestCigarCommentTO cmtTO = new RequestCigarCommentTO();
 		cmtTO.setRequest_pseq(Integer.parseInt((String)(paramMap.get("request_pseq"))));
@@ -302,7 +302,7 @@ public class RequestAPICigarController {
 	}
 	
 	@RequestMapping(value = "api/request_parent_cmt_write.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject requestParentCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject requestParentCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		HttpSession session = request.getSession();
 		JSONObject requestCmtWriteObj = new JSONObject();
@@ -321,7 +321,7 @@ public class RequestAPICigarController {
 	
 	
 	@RequestMapping(value = "api/request_cmt_write.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject requestCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject requestCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		HttpSession session = request.getSession();
 		RequestCigarCommentTO to = new RequestCigarCommentTO();
@@ -339,7 +339,7 @@ public class RequestAPICigarController {
 	}
 	
 	@RequestMapping(value = "api/request_cmt_write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject requestCmtWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject requestCmtWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		RequestCigarCommentTO to = new RequestCigarCommentTO();
 		HttpSession session = request.getSession();
@@ -358,7 +358,7 @@ public class RequestAPICigarController {
 	}
 	
 	@RequestMapping(value = "api/request_cmt_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject requestCmtModify(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject requestCmtModify(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		RequestCigarCommentTO to = new RequestCigarCommentTO();
 		to.setRequest_cmt_seq(Integer.parseInt((String)(paramMap.get("request_cmt_seq"))));
@@ -378,7 +378,7 @@ public class RequestAPICigarController {
 	}
 	
 	@RequestMapping(value = "api/request_cmt_modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject requestCmtModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject requestCmtModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		RequestCigarCommentTO to = new RequestCigarCommentTO();
 		to.setRequest_cmt_seq(Integer.parseInt((String)(paramMap.get("request_cmt_seq"))));
@@ -397,7 +397,7 @@ public class RequestAPICigarController {
 	}
 	
 	@RequestMapping(value = "api/request_cmt_delete.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject requestCmtDelete(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject requestCmtDelete(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		RequestCigarCommentTO to = new RequestCigarCommentTO();
 		to.setRequest_cmt_seq(Integer.parseInt((String)(paramMap.get("request_cmt_seq"))));
@@ -417,7 +417,7 @@ public class RequestAPICigarController {
 	}
 	
 	@RequestMapping(value = "api/request_cmt_delete_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject requestCmtDeleteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject requestCmtDeleteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		HttpSession session = request.getSession();
 		RequestCigarCommentTO to = new RequestCigarCommentTO();
 		to.setRequest_cmt_seq(Integer.parseInt((String)(paramMap.get("request_cmt_seq"))));
@@ -429,7 +429,7 @@ public class RequestAPICigarController {
 	}
 	
 	@RequestMapping(value = "api/requestSearch", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONArray requestSearch(@RequestBody Map<String, Object>paramMap, HttpServletRequest request, HttpServletResponse response) {
+	public JSONArray requestSearch(@RequestParam Map<String, Object>paramMap, HttpServletRequest request, HttpServletResponse response) {
 		RequestCigarTO to = new RequestCigarTO();
 		to.setRequest_cigar_brand((String)paramMap.get("Request_cigar_brand"));
 		to.setRequest_cigar_name((String)paramMap.get("Request_cigar_name"));

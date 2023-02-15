@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,13 +43,13 @@ public class MemberAPIController {
 //	}
 	
 	//로그인 확인
-	@RequestMapping(value = "api/login_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value = "api/loginOk.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public JSONObject login_ok(@RequestBody Map<String, Object> paramMap,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		MemberTO to = new MemberTO();
-		JSONObject login_ok = new JSONObject();
+		JSONObject loginOk = new JSONObject();
 		HttpSession session = request.getSession();
 		
-		to.setEmail((String)paramMap.get("email"));
+		to.setEmail((String)paramMap.get("username"));
 		to.setPassword((String)paramMap.get("password"));
 		to = dao.login_Ok(to);
 		
@@ -63,10 +64,17 @@ public class MemberAPIController {
 		} catch(NullPointerException e) {
 			System.err.println("NULL! : " + e.getMessage());
 		}
+		loginOk.put("emailss", to.getEmail());
+		loginOk.put("member_seq", to.getMember_seq());
+		loginOk.put("name", to.getName());
+		loginOk.put("phone", to.getPhone());
+		loginOk.put("nickname", to.getNickname());
+		loginOk.put("smoke_years", to.getSmoke_years());
+		loginOk.put("birthday", to.getBirthday());
 		//System.out.println(result);
 		//login_ok.put("member_data", request.getParameter("email"));
 		
-		return login_ok;
+		return loginOk;
 	}
 	
 //	// 로그인 성공시 완료 화면 뷰페이지
@@ -95,7 +103,7 @@ public class MemberAPIController {
 //	}
 		
 	@RequestMapping(value = "api/id_search_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject id_Search_Ok(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
+	public JSONObject id_Search_Ok(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
 		MemberTO to = new MemberTO();
 		JSONObject id_search_ok = new JSONObject();
 		try {
@@ -122,7 +130,7 @@ public class MemberAPIController {
 		
 	// 회원가입 확인
 	@RequestMapping(value = "api/member_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject member_ok(@RequestBody Map<String, Object> paramMap , HttpServletRequest request, HttpServletResponse response) {
+	public JSONObject member_ok(@RequestParam Map<String, Object> paramMap , HttpServletRequest request, HttpServletResponse response) {
 		MemberTO to = new MemberTO();
 		JSONObject member_Ok_Obj = new JSONObject();
 		int flag = 0;
@@ -190,7 +198,7 @@ public class MemberAPIController {
 	
 	//회원가입시 아이디 중복 검사
 	@RequestMapping(value = "api/member_id_check.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject memberIdCheck(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletRequest response) {
+	public JSONObject memberIdCheck(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletRequest response) {
 		JSONObject memberIdCheck = new JSONObject();
 		MemberTO to = new MemberTO();
 		to.setEmail((String)paramMap.get("email"));
@@ -202,7 +210,7 @@ public class MemberAPIController {
 	
 	// 회원정보 보기 뷰페이지
 	@RequestMapping(value = "api/memberview.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject member_View(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletRequest response) {
+	public JSONObject member_View(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletRequest response) {
 		MemberTO to = new MemberTO();
 		ReviewTO rto = new ReviewTO();
 		FreeBoardTO fto = new FreeBoardTO();
@@ -299,7 +307,7 @@ public class MemberAPIController {
 	
 	// 회원정보 수정
 	@RequestMapping(value = "api/member_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject member_modify(@RequestBody Map<String, Object> paramMap, HttpServletRequest request, HttpServletRequest response) {
+	public JSONObject member_modify(@RequestParam Map<String, Object> paramMap, HttpServletRequest request, HttpServletRequest response) {
 		MemberTO to = new MemberTO();
 		HttpSession session = request.getSession();
 		JSONObject member_Modify_Obj = new JSONObject();
@@ -321,7 +329,7 @@ public class MemberAPIController {
 	
 	// 회원정보 수정 확인
 	@RequestMapping(value = "api/member_modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject member_modify_ok(@RequestBody Map<String, Object> paramMap, HttpServletRequest request, HttpServletRequest response) {
+	public JSONObject member_modify_ok(@RequestParam Map<String, Object> paramMap, HttpServletRequest request, HttpServletRequest response) {
 		MemberTO to = new MemberTO();
 		HttpSession session = request.getSession();
 		JSONObject member_modify_ok = new JSONObject();
@@ -349,7 +357,7 @@ public class MemberAPIController {
 	
 	//비밀번호 수정 확인
 	@RequestMapping(value = "api/modifyPassword.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject member_modify_password_ok (@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletRequest response) {
+	public JSONObject member_modify_password_ok (@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletRequest response) {
 		MemberTO to = new MemberTO();
 		JSONObject modifyPassword = new JSONObject();
 		HttpSession session = request.getSession();
@@ -372,7 +380,7 @@ public class MemberAPIController {
 
 	// 메일 유효성 검사
 	@RequestMapping(value = "api/mail_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject mail_ok(@RequestBody Map<String, Object> paramMap, HttpServletRequest request, HttpServletRequest response) {		
+	public JSONObject mail_ok(@RequestParam Map<String, Object> paramMap, HttpServletRequest request, HttpServletRequest response) {		
 		MemberTO to = new MemberTO();
 		JSONObject mail_ok = new JSONObject();
 		
@@ -384,8 +392,10 @@ public class MemberAPIController {
 	    	password.append(CHAR_SET.charAt(index));    
 	    }
 	    String tempPassword = password.toString();
-		to.setEmail(request.getParameter("email"));
-		to.setMember_seq(to.getMember_seq());
+	    to.setBirthday(Date.valueOf((String)paramMap.get("birthday")));
+		to.setName((String)paramMap.get("name"));
+		to.setPhone((String)paramMap.get("phoneNum1") + (String)paramMap.get("phoneNum2") + (String)paramMap.get("phoneNum3"));
+		to.setEmail((String)paramMap.get("email"));
 		int flag = dao.member_mail(to, tempPassword);
 		
 		mail_ok.put("flag", flag);
@@ -403,7 +413,7 @@ public class MemberAPIController {
 	
 	//회원 삭제, 회원 탈퇴 확인
 	@RequestMapping("api/member_delete.do")
-	public JSONObject member_Delete_Ok(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
+	public JSONObject member_Delete_Ok(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
 		MemberTO to = new MemberTO();
 		JSONObject member_delete = new JSONObject();
 		HttpSession session = request.getSession();

@@ -77,8 +77,8 @@ public class FreeBoardController {
 		FreeBoardTO to = new FreeBoardTO();
 		FreeBoardCommentTO cmtTO = new FreeBoardCommentTO();
 		//to.setFree_seq(Integer.parseInt(request.getParameter("free_seq")));
-		to.setFree_seq(1);
-		cmtTO.setFree_pseq(1);
+		to.setFree_seq(2);
+		cmtTO.setFree_pseq(2);
 		
 		to = dao.freeView(to);
 		JSONObject freeViewObj = new JSONObject();

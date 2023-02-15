@@ -25,8 +25,11 @@ import com.project.cigar.to.CigarTO;
 @Controller
 public class CigarController {
 	
-	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/cigarUpload/";
-	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/cigarUpload/cigarBackup/";
+//	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/cigarUpload/";
+//	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/cigarUpload/cigarBackup/";
+	
+	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/cigarUpload/";
+	private String backupFilePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/cigarUpload/cigarBackup/";
 	
 	@Autowired
 	private CigarDAO dao;

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +42,7 @@ public class GongjiAPIController {
 	private String backupFilePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/gongjiUpload/gongjiBackup/";
 
 //	@RequestMapping(value = "api/gongjiLists.do", method = {RequestMethod.GET, RequestMethod.POST})
-//	public JSONArray gongjiList(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+//	public JSONArray gongjiList(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 //
 //		ArrayList<GongjiTO> listTO = dao.gongjiList();
 //		JSONArray gongjiLists = new JSONArray();
@@ -70,7 +70,7 @@ public class GongjiAPIController {
 //	}
 //	
 	@RequestMapping(value = "api/gongjiLists.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject gongjiList(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject gongjiList(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		String page = (String)(paramMap.get("_page"));
 		String limit = (String)(paramMap.get("_limit"));
 		
@@ -103,7 +103,7 @@ public class GongjiAPIController {
 	}
 	
 	@RequestMapping(value = "api/gongji_view.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject gongjiView(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject gongjiView(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		GongjiTO to = new GongjiTO();
 		//to.setGongji_cigar_seq(Integer.parseInt((String)(paramMap.get("gongji_cigar_seq")));
 		to.setGongji_seq(Integer.parseInt((String)(paramMap.get("gongji_seq"))));
@@ -128,12 +128,12 @@ public class GongjiAPIController {
 	}
 
 	@RequestMapping(value = "api/gongji_write.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public void gongjiWrite(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public void gongjiWrite(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 	}
 	
 	@RequestMapping(value = "api/gongji_write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject gongjiWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap,@RequestBody MultipartFile upload) {
+	public JSONObject gongjiWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap,@RequestParam MultipartFile upload) {
 		HttpSession session = request.getSession();
 		System.out.println("확인 : " + (String)(paramMap.get("gongji_subject")));
 		System.out.println("session : " + session.getAttribute("member_seq"));
@@ -180,7 +180,7 @@ public class GongjiAPIController {
 	}
 	
 	@RequestMapping(value = "api/gongji_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject gongjiModify(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject gongjiModify(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		
 		GongjiTO to = new GongjiTO();
 		to.setGongji_seq(Integer.parseInt((String)(paramMap.get("gongji_seq"))));
@@ -203,7 +203,7 @@ public class GongjiAPIController {
 	}
 	
 	@RequestMapping(value = "/api/gongji_modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject gongjiModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap, @RequestBody MultipartFile upload) {
+	public JSONObject gongjiModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap, @RequestParam MultipartFile upload) {
 		//System.out.println((String)(paramMap.get("gongji_subject"));
 		System.out.println(paramMap.get("gongji_seq"));
 		System.out.println(paramMap.get("gongji_subject"));
@@ -255,7 +255,7 @@ public class GongjiAPIController {
 	}
 	
 	@RequestMapping(value = "api/gongji_delete.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject gongjiDelete(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject gongjiDelete(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		GongjiTO to = new GongjiTO();
 		to.setGongji_seq(Integer.parseInt((String)(paramMap.get("gongji_seq"))));
@@ -278,7 +278,7 @@ public class GongjiAPIController {
 	}
 	
 	@RequestMapping(value = "api/gongji_delete_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject gongjideleteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject gongjideleteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		HttpSession session = request.getSession();
 		GongjiTO to = new GongjiTO();
 		to.setGongji_seq(Integer.parseInt((String)(paramMap.get("gongji_seq"))));
@@ -301,7 +301,7 @@ public class GongjiAPIController {
 	}
 	
 	@RequestMapping(value = "api/gongjiCommentLists.do", method = {RequestMethod.GET, RequestMethod.POST} )
-	public JSONArray gongjiCommentList(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONArray gongjiCommentList(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		JSONArray gongjiCommentLists = new JSONArray();
 		GongjiCommentTO cmtTO = new GongjiCommentTO();
 		cmtTO.setGongji_pseq(Integer.parseInt((String)(paramMap.get("gongji_pseq"))));
@@ -325,7 +325,7 @@ public class GongjiAPIController {
 	}
 	
 	@RequestMapping(value = "api/gongji_parent_cmt_write.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject gongjiParentCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject gongjiParentCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		HttpSession session = request.getSession();
 		JSONObject gongjiCmtWriteObj = new JSONObject();
@@ -344,7 +344,7 @@ public class GongjiAPIController {
 	
 	
 	@RequestMapping(value = "api/gongji_cmt_write.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject gongjiCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject gongjiCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		HttpSession session = request.getSession();
 		GongjiCommentTO to = new GongjiCommentTO();
@@ -362,7 +362,7 @@ public class GongjiAPIController {
 	}
 	
 	@RequestMapping(value = "api/gongji_cmt_write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject gongjiCmtWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject gongjiCmtWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		GongjiCommentTO to = new GongjiCommentTO();
 		HttpSession session = request.getSession();
@@ -381,7 +381,7 @@ public class GongjiAPIController {
 	}
 	
 	@RequestMapping(value = "api/gongji_cmt_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject gongjiCmtModify(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject gongjiCmtModify(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		GongjiCommentTO to = new GongjiCommentTO();
 		to.setGongji_cmt_seq(Integer.parseInt((String)(paramMap.get("gongji_cmt_seq"))));
@@ -401,7 +401,7 @@ public class GongjiAPIController {
 	}
 	
 	@RequestMapping(value = "api/gongji_cmt_modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject gongjiCmtModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject gongjiCmtModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		GongjiCommentTO to = new GongjiCommentTO();
 		to.setGongji_cmt_seq(Integer.parseInt((String)(paramMap.get("gongji_cmt_seq"))));
@@ -420,7 +420,7 @@ public class GongjiAPIController {
 	}
 	
 	@RequestMapping(value = "api/gongji_cmt_delete.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject gongjiCmtDelete(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject gongjiCmtDelete(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		GongjiCommentTO to = new GongjiCommentTO();
 		to.setGongji_cmt_seq(Integer.parseInt((String)(paramMap.get("gongji_cmt_seq"))));
@@ -440,7 +440,7 @@ public class GongjiAPIController {
 	}
 	
 	@RequestMapping(value = "api/gongji_cmt_delete_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject gongjiCmtDeleteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject gongjiCmtDeleteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		HttpSession session = request.getSession();
 		GongjiCommentTO to = new GongjiCommentTO();
 		to.setGongji_cmt_seq(Integer.parseInt((String)(paramMap.get("gongji_cmt_seq"))));
@@ -452,7 +452,7 @@ public class GongjiAPIController {
 	}
 	
 	@RequestMapping(value = "api/gongjiSearch", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONArray gongjiSearch(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response){
+	public JSONArray gongjiSearch(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response){
 		GongjiTO to = new GongjiTO();
 		
 		to.setGongji_content((String)paramMap.get("Gongji_content"));

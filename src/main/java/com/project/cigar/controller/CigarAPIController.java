@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,12 +31,14 @@ public class CigarAPIController {
 	@Autowired
 	private CigarDAO dao;
 	
-	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/cigarUpload/";
-	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/cigarUpload/cigarBackup/";
+//	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/cigarUpload/";
+//	private String backupFilePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/cigarUpload/cigarBackup/";
 
+	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/cigarUpload/";
+	private String backupFilePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/cigarUpload/cigarBackup/";
 	
 	@RequestMapping(value = "/api/cigarListObj.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject cigarList(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject cigarList(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		int cpage = 1;
 		if((String)(paramMap.get("cpage")) != null && !paramMap.get("cpage").equals("")) {
@@ -79,7 +81,7 @@ public class CigarAPIController {
 	}
 	
 	@RequestMapping(value = "/api/cigarLists.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONArray cigarListMin(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONArray cigarListMin(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		ArrayList<CigarTO> listTO = dao.cigarListMin();
 		JSONArray cigarLists = new JSONArray();
 		for(CigarTO to : listTO) {
@@ -100,12 +102,12 @@ public class CigarAPIController {
 			
 			cigarLists.add(obj);
 		}
-		
+
 		return cigarLists;
 	}
 	
 	@RequestMapping(value = "/api/cigar_view.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject cigarView(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject cigarView(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		CigarTO to = new CigarTO();
 		//to.setCigar_seq(Integer.parseInt((String)(paramMap.get("cigar_seq")));
@@ -131,13 +133,13 @@ public class CigarAPIController {
 	}
 	
 	@RequestMapping(value = "/api/cigar_write.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public void cigarWrite(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public void cigarWrite(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		
 	}
 	
 	@RequestMapping(value = "/api/cigar_write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject cigarWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject cigarWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		HttpSession session = request.getSession();
 		CigarTO to = new CigarTO();
 		
@@ -171,7 +173,7 @@ public class CigarAPIController {
 	}
 	
 	@RequestMapping(value = "/api/cigar_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject cigarModify(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject cigarModify(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		CigarTO to = new CigarTO();
 
 		to.setCigar_seq(Integer.parseInt((String)(paramMap.get("cigar_seq"))));
@@ -194,7 +196,7 @@ public class CigarAPIController {
 	
 	@RequestMapping(value = "/api/cigar_modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public JSONObject cigarModifyOk(HttpServletRequest request, HttpServletResponse response,
-			@RequestBody Map<String,Object> paramMap, @RequestBody MultipartFile upload) {
+			@RequestParam Map<String,Object> paramMap, @RequestParam MultipartFile upload) {
 		HttpSession session = request.getSession();
 		CigarTO to = new  CigarTO();
 		String oldfilename = (String)paramMap.get("cigar_file_name");
@@ -239,7 +241,7 @@ public class CigarAPIController {
 	}
 	
 	@RequestMapping(value = "/api/cigar_delete.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject cigarDelete(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject cigarDelete(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		CigarTO to = new CigarTO();
 		to.setCigar_seq(Integer.parseInt((String)(paramMap.get("cigar_seq"))));
@@ -263,7 +265,7 @@ public class CigarAPIController {
 	}
 	
 	@RequestMapping(value = "/api/cigar_delete_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject cigarDeleteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject cigarDeleteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		HttpSession session = request.getSession();
 		CigarTO to = new CigarTO();
 		to.setCigar_seq(Integer.parseInt((String)(paramMap.get("cigar_seq"))));
@@ -287,7 +289,7 @@ public class CigarAPIController {
 	}
 	
 	@RequestMapping("/api/cigarSearch.do")
-	public JSONArray ciarSearch(@RequestBody Map<String, Object> paramMap, HttpServletRequest request, HttpServletResponse response) {
+	public JSONArray ciarSearch(@RequestParam Map<String, Object> paramMap, HttpServletRequest request, HttpServletResponse response) {
 		CigarTO to = new CigarTO();
 		to.setCigar_brand((String)paramMap.get("cigar_brand"));
 		to.setCigar_name((String)paramMap.get("cigar_name"));

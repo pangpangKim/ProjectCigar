@@ -17,6 +17,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,8 +44,8 @@ public class FreeBoardAPIController {
 	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/freeUpload/";
 	private String backupFilePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/freeUpload/freeBackup/";
 	
-	@RequestMapping(value = "api/freeList.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONArray freeList(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/api/freeList.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public JSONArray freeList(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
 		ArrayList<FreeBoardTO> freeLists = dao.freeList();
 		
 		//JSONObject freeListsObj = new JSONObject();
@@ -71,8 +72,8 @@ public class FreeBoardAPIController {
 		return freeList;
 	}
 	
-	@RequestMapping(value = "api/freeView.do", method = {RequestMethod.GET, RequestMethod.POST} )
-	public JSONObject freeView(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/api/freeView.do", method = {RequestMethod.GET, RequestMethod.POST} )
+	public JSONObject freeView(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
 		FreeBoardTO to = new FreeBoardTO();
 		FreeBoardCommentTO cmtTO = new FreeBoardCommentTO();
 		//to.setFree_seq(Integer.parseInt(request.getParameter("free_seq")));
@@ -123,15 +124,15 @@ public class FreeBoardAPIController {
 		return freeView;
 	}
 	
-	@RequestMapping(value = "api/free/write.do", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value = "/api/free/write.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView freeWrite(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("freeViews/freeWrite");
 		return mav;
 	}
 	
-	@RequestMapping(value = "api/free/write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject freeWriteOk(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response,@RequestBody MultipartFile upload) {
+	@RequestMapping(value = "/api/free/write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public JSONObject freeWriteOk(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response,@RequestParam MultipartFile upload) {
 		HttpSession session = request.getSession();
 		FreeBoardTO to = new FreeBoardTO();
 		
@@ -172,8 +173,8 @@ public class FreeBoardAPIController {
 		return write_ok;
 	}
 	
-	@RequestMapping(value = "api/free_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject freeModify(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/api/free_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public JSONObject freeModify(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
 		FreeBoardTO to = new FreeBoardTO();
 		
 		//to.setFree_seq(Integer.parseInt(request.getParameter("free_seq")));
@@ -202,8 +203,8 @@ public class FreeBoardAPIController {
 		return freeModify;
 	}
 	
-	@RequestMapping(value = "api/free/modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject freeModify_Ok(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response,@RequestBody MultipartFile upload) {
+	@RequestMapping(value = "/api/free/modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public JSONObject freeModify_Ok(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response,@RequestParam MultipartFile upload) {
 		FreeBoardTO to = new FreeBoardTO();
 		String oldfilename = (String)paramMap.get("free_file_name");
 		
@@ -249,8 +250,8 @@ public class FreeBoardAPIController {
 		return freeModifyOk;	
 	}
 	
-	@RequestMapping(value = "api/free/delete.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject freeDelete(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response,@RequestBody MultipartFile upload) {
+	@RequestMapping(value = "/api/free/delete.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public JSONObject freeDelete(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response,@RequestParam MultipartFile upload) {
 		FreeBoardTO to = new FreeBoardTO();
 		//to.setFree_seq(Integer.parseInt(request.getParameter("free_seq")));
 		to.setFree_seq(Integer.parseInt((String)paramMap.get("free_seq")));
@@ -273,8 +274,8 @@ public class FreeBoardAPIController {
 		return freeDeleteObj;
 	}
 
-	@RequestMapping(value = "api/free/delete_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject freedeleteOk(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/api/free/delete_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public JSONObject freedeleteOk(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
 		FreeBoardTO to = new FreeBoardTO();
 		HttpSession session = request.getSession();
 		to.setFree_writer_seq((int)session.getAttribute("member_seq"));
@@ -298,8 +299,8 @@ public class FreeBoardAPIController {
 		return freedeleteOk;
 	}
 	
-	@RequestMapping(value = "api/freeCommentLists.do", method = {RequestMethod.GET, RequestMethod.POST} )
-	public JSONArray freeCommentList(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	@RequestMapping(value = "/api/freeCommentLists.do", method = {RequestMethod.GET, RequestMethod.POST} )
+	public JSONArray freeCommentList(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		JSONArray freeCommentLists = new JSONArray();
 		FreeBoardCommentTO cmtTO = new FreeBoardCommentTO();
 		cmtTO.setFree_pseq(Integer.parseInt((String)(paramMap.get("gongji_pseq"))));
@@ -324,7 +325,7 @@ public class FreeBoardAPIController {
 	}
 	
 	@RequestMapping(value = "/api/free_parent_cmt_write.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject freeParentCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject freeParentCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		HttpSession session = request.getSession();
 		JSONObject freeCmtWriteObj = new JSONObject();
@@ -343,7 +344,7 @@ public class FreeBoardAPIController {
 	
 	
 	@RequestMapping(value = "/api/free_cmt_write.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject freeCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject freeCmtWrite(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		HttpSession session = request.getSession();
 		FreeBoardCommentTO to = new FreeBoardCommentTO();
@@ -361,7 +362,7 @@ public class FreeBoardAPIController {
 	}
 	
 	@RequestMapping(value = "/api/free_cmt_write_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject freeCmtWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject freeCmtWriteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		FreeBoardCommentTO to = new FreeBoardCommentTO();
 		HttpSession session = request.getSession();
@@ -380,7 +381,7 @@ public class FreeBoardAPIController {
 	}
 	
 	@RequestMapping(value = "/api/free_cmt_modify.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject freeCmtModify(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject freeCmtModify(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		FreeBoardCommentTO to = new FreeBoardCommentTO();
 		to.setFree_cmt_seq(Integer.parseInt((String)(paramMap.get("free_cmt_seq"))));
@@ -400,7 +401,7 @@ public class FreeBoardAPIController {
 	}
 	
 	@RequestMapping(value = "/api/free_cmt_modify_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject freeCmtModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject freeCmtModifyOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		FreeBoardCommentTO to = new FreeBoardCommentTO();
 		to.setFree_cmt_seq(Integer.parseInt((String)(paramMap.get("free_cmt_seq"))));
@@ -419,7 +420,7 @@ public class FreeBoardAPIController {
 	}
 	
 	@RequestMapping(value = "/api/free_cmt_delete.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject freeCmtDelete(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject freeCmtDelete(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		 
 		FreeBoardCommentTO to = new FreeBoardCommentTO();
 		to.setFree_cmt_seq(Integer.parseInt((String)(paramMap.get("free_cmt_seq"))));
@@ -439,7 +440,7 @@ public class FreeBoardAPIController {
 	}
 	
 	@RequestMapping(value = "/api/free_cmt_delete_ok.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONObject freeCmtDeleteOk(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> paramMap) {
+	public JSONObject freeCmtDeleteOk(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> paramMap) {
 		HttpSession session = request.getSession();
 		FreeBoardCommentTO to = new FreeBoardCommentTO();
 		to.setFree_cmt_seq(Integer.parseInt((String)(paramMap.get("free_cmt_seq"))));
@@ -451,7 +452,7 @@ public class FreeBoardAPIController {
 	}
 	
 	@RequestMapping(value = "api/freeSearch", method = {RequestMethod.GET, RequestMethod.POST})
-	public JSONArray freeSearch(@RequestBody Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response){
+	public JSONArray freeSearch(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response){
 		FreeBoardTO to = new FreeBoardTO();
 //		to.setFree_subject(request.getParameter("free_subject"));
 //		to.setFree_content(request.getParameter("free_content"));

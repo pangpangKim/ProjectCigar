@@ -18,7 +18,8 @@ public class CigarDAO {
 	@Autowired
 	private CigarMapperInter cigarMapperInter;
 	
-	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/cigarUpload/";
+//	private String filePath = "C:/eGovFrameDev-4.0.0-64bit/workspace/Project_Cigar/src/main/webapp/uploads/cigarUpload/";
+	private String filePath = System.getProperty("user.dir") + "/src/main/webapp/uploads/cigarUpload/";
 	
 	public CigarListTO cigarList(CigarListTO listTO){
 		ArrayList<CigarTO> cigarLists = cigarMapperInter.cigarList();

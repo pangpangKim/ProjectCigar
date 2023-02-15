@@ -47,7 +47,7 @@ public interface MemberMapperInter {
 	@Select("select email from member_table where name=#{name} and phone=#{phone} and birthday=#{birthday} ")
 	MemberTO search_Id(MemberTO to);
 	
-	@Select("select email, name, member_seq, nickname from member_table where email=#{email}")
+	@Select("select email, name, member_seq, nickname from member_table where email=#{email} and name=#{name} and phone={#phone}")
 	MemberTO mail_ok(MemberTO to);
 	
 	@Update("update member_table set password=HEX(AES_ENCRYPT(#{password}, SHA2('apfh2009@naver.com', 256))) where member_seq=#{member_seq}")
